@@ -79,11 +79,14 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Kaisar&#39;s Notes">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;index.html">
+<meta name="description" content="最近遇到一个奇怪的事情，公司有一块业务需要在Android上通过启动一个普通的java进程，但是从后台统计数据上来看在Android4.x上进程无法启动所以找台Nexux4 4.2.2的手机来试果然会崩溃，崩溃日志如下 123456789101112131415161718192021222324252627282930D&#x2F;AndroidRuntime( 3877): &amp;gt;&amp;gt;&amp;gt;&amp;g">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android低版本(4.x)无法通过app_process启动java进程问题详解">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;17&#x2F;Android%E4%BD%8E%E7%89%88%E6%9C%AC-4-x-%E6%97%A0%E6%B3%95%E9%80%9A%E8%BF%87app-process%E5%90%AF%E5%8A%A8java%E8%BF%9B%E7%A8%8B%E8%AF%A6%E8%A7%A3&#x2F;index.html">
 <meta property="og:site_name" content="Kaisar&#39;s Notes">
+<meta property="og:description" content="最近遇到一个奇怪的事情，公司有一块业务需要在Android上通过启动一个普通的java进程，但是从后台统计数据上来看在Android4.x上进程无法启动所以找台Nexux4 4.2.2的手机来试果然会崩溃，崩溃日志如下 123456789101112131415161718192021222324252627282930D&#x2F;AndroidRuntime( 3877): &amp;gt;&amp;gt;&amp;gt;&amp;g">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-11-20T03:36:49.915Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -114,13 +117,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/11/17/Android低版本-4-x-无法通过app-process启动java进程详解/"/>
 
 
 
 
 
-  <title>Kaisar's Notes</title>
+  <title>Android低版本(4.x)无法通过app_process启动java进程问题详解 | Kaisar's Notes</title>
   
 
 
@@ -139,8 +142,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -233,9 +235,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -265,9 +267,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/17/Android%E4%BD%8E%E7%89%88%E6%9C%AC-4-x-%E6%97%A0%E6%B3%95%E9%80%9A%E8%BF%87app-process%E5%90%AF%E5%8A%A8java%E8%BF%9B%E7%A8%8B%E8%AF%A6%E8%A7%A3/" itemprop="url">Android低版本(4.x)无法通过app_process启动java进程问题详解</a></h1>
+          <h1 class="post-title" itemprop="name headline">Android低版本(4.x)无法通过app_process启动java进程问题详解</h1>
         
 
         <div class="post-meta">
@@ -339,9 +339,7 @@
       
 
       
-        
-          
-            <p>最近遇到一个奇怪的事情，公司有一块业务需要在Android上通过启动一个普通的java进程，但是从后台统计数据上来看在Android4.x上进程无法启动所以找台Nexux4 4.2.2的手机来试果然会崩溃，崩溃日志如下</p>
+        <p>最近遇到一个奇怪的事情，公司有一块业务需要在Android上通过启动一个普通的java进程，但是从后台统计数据上来看在Android4.x上进程无法启动所以找台Nexux4 4.2.2的手机来试果然会崩溃，崩溃日志如下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">D/AndroidRuntime( 3877): &gt;&gt;&gt;&gt;&gt;&gt; AndroidRuntime START com.android.internal.os.RuntimeInit &lt;&lt;&lt;&lt;&lt;&lt;</span><br><span class="line">D/AndroidRuntime( 3877): CheckJNI is OFF</span><br><span class="line">D/dalvikvm( 3877): Trying to load lib libjavacore.so 0x0</span><br><span class="line">D/dalvikvm( 3877): Added shared lib libjavacore.so 0x0</span><br><span class="line">D/dalvikvm( 3877): Trying to load lib libnativehelper.so 0x0</span><br><span class="line">D/dalvikvm( 3877): Added shared lib libnativehelper.so 0x0</span><br><span class="line">D/dalvikvm( 3877): No JNI_OnLoad found in libnativehelper.so 0x0, skipping init</span><br><span class="line">E/dalvikvm( 3877): Dex cache directory isn&apos;t writable: /data/dalvik-cache</span><br><span class="line">I/dalvikvm( 3877): Unable to open or create cache for /data/data/com.mjar.test/cache/app@data.apk (/data/dalvik-cache/data@data@com.mjar.test@cache@app@data.apk@classes.dex)</span><br><span class="line">E/appproc ( 3877): ERROR: could not find class &apos;cmd.Main&apos;</span><br><span class="line">E/dalvikvm( 3877): JNI posting fatal error: Native registration unable to find class &apos;android/debug/JNITest&apos;; aborting...</span><br><span class="line">I/dalvikvm( 3877): &quot;main&quot; prio=5 tid=1 NATIVE</span><br><span class="line">I/dalvikvm( 3877):   | group=&quot;main&quot; sCount=0 dsCount=0 obj=0x415b7ca8 self=0x6d455010</span><br><span class="line">I/dalvikvm( 3877):   | sysTid=3877 nice=0 sched=0/0 cgrp=default handle=1074467156</span><br><span class="line">I/dalvikvm( 3877):   | state=R schedstat=( 0 0 0 ) utm=19 stm=13 core=0</span><br><span class="line">I/dalvikvm( 3877):   #00  pc 0000132e  /system/lib/libcorkscrew.so (unwind_backtrace_thread+29)</span><br><span class="line">I/dalvikvm( 3877):   #01  pc 00060652  /system/lib/libdvm.so (dvmDumpNativeStack(DebugOutputTarget const*, int)+33)</span><br><span class="line">I/dalvikvm( 3877):   #02  pc 00054640  /system/lib/libdvm.so (dvmDumpThreadEx(DebugOutputTarget const*, Thread*, bool)+395)</span><br><span class="line">I/dalvikvm( 3877):   #03  pc 000546ae  /system/lib/libdvm.so (dvmDumpThread(Thread*, bool)+25)</span><br><span class="line">I/dalvikvm( 3877):   #04  pc 000490c0  /system/lib/libdvm.so</span><br><span class="line">I/dalvikvm( 3877):   #05  pc 00001fa8  /system/lib/libnativehelper.so (jniRegisterNativeMethods+39)</span><br><span class="line">I/dalvikvm( 3877):   #06  pc 0004cd22  /system/lib/libandroid_runtime.so</span><br><span class="line">I/dalvikvm( 3877):   #07  pc 0004d010  /system/lib/libandroid_runtime.so (android::AndroidRuntime::startReg(_JNIEnv*)+23)</span><br><span class="line">I/dalvikvm( 3877):   #08  pc 0004da60  /system/lib/libandroid_runtime.so (android::AndroidRuntime::start(char const*, char const*)+183)</span><br><span class="line">I/dalvikvm( 3877):   #09  pc 0000105a  /system/bin/app_process</span><br><span class="line">I/dalvikvm( 3877):   #10  pc 0000e348  /system/lib/libc.so (__libc_init+47)</span><br><span class="line">I/dalvikvm( 3877):   at dalvik.system.NativeStart.main(Native Method)</span><br><span class="line">I/dalvikvm( 3877):   at dalvik.system.NativeStart.main(Native Method)</span><br><span class="line">I/dalvikvm( 3877): </span><br><span class="line">E/dalvikvm( 3877): VM aborting</span><br></pre></td></tr></table></figure>
 
 <p>通过分析日志得知崩溃的原因是因为cmd.Main这个类没找到，但是明明在5.0以上的版本是可以执行的所以可以排除类不在dex文件里，正当百思不得其姐的时候定睛一看还有一行很关键的信息  <code>E/dalvikvm( 3877): Dex cache directory isn&#39;t writable: /data/dalvik-cache</code>  看样子跟这个有点关系啊！我们知道在android上加载dex文件时系统会做一些优化以加快运行速度也就是dex2oat的过程优化后的odex文件就存储在<code>/data/dalvik-cache</code>这个目录中，因为我们加载自定义的dex文件所以在执行dex2oat的这个操作也是以普通应用的uid去执行的所以理所当然的会没有权限写入这个目录，但是不写入这个目录dex文件不就无法运行起来到这似乎陷入了一个僵局，没办法只能翻翻系统源码看看有没有什么可操作的空间了。</p>
@@ -361,8 +359,6 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">    int dvmJarFileOpen(const char* fileName, const char* odexOutputName,</span><br><span class="line">    JarFile** ppJarFile, bool isBootstrap)</span><br><span class="line">&#123;</span><br><span class="line">    //......</span><br><span class="line"></span><br><span class="line">    /* First, look for a &quot;.odex&quot; alongside the jar file.  It will</span><br><span class="line">     * have the same name/path except for the extension.</span><br><span class="line">     */</span><br><span class="line">    fd = openAlternateSuffix(fileName, &quot;odex&quot;, O_RDONLY, &amp;cachedName);</span><br><span class="line">    </span><br><span class="line">    //......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>看到这里的注释我想大家应该的都明白了，对于apk文件处理方式有些特殊会优先在同级目录查找odex文件，所以我需要做的仅仅是把dex文件改为apk文件然后通过反射调用<a href="http://androidxref.com/4.2.2_r1/xref/libcore/dalvik/src/main/java/dalvik/system/DexFile.java#139" target="_blank" rel="noopener">DexFile#loadDex函数</a>指定第二个参数odex文件名称提前把odex文件生成出来再使用app_process去运行apk文件就可以了，不过为什么在Android5.0以上可以直接加载dex文件呢，于是我在8.0系统上又试了一下发现在运行dex文件的同时系统会自动在同级目录创建一个oat目录里面存放的正是odex文件，所以由此可以猜测当在高版本的系统上运行app_process命令如果没有权限写入<code>/data/dalvik-cache</code>则会在同级目录自动创建odex文件，这只是我个人的猜想并没有详细的研究源码怎么实现的感兴趣的话可以自己研究一下。</p>
 
-          
-        
       
     </div>
     
@@ -379,12 +375,12 @@
       
 
       
+      
+      
 
       
 
       
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -394,10 +390,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -405,6 +402,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -633,6 +634,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
