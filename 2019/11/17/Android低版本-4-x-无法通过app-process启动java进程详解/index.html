@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Kaisar&#39;s Notes">
 <meta property="og:description" content="最近遇到一个奇怪的事情，公司有一块业务需要在Android上通过启动一个普通的java进程，但是从后台统计数据上来看在Android4.x上进程无法启动所以找台Nexux4 4.2.2的手机来试果然会崩溃，崩溃日志如下 123456789101112131415161718192021222324252627282930D&#x2F;AndroidRuntime( 3877): &amp;gt;&amp;gt;&amp;gt;&amp;g">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-20T03:36:49.915Z">
+<meta property="og:updated_time" content="2019-11-22T11:20:04.417Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -352,6 +352,8 @@
         <p>最近遇到一个奇怪的事情，公司有一块业务需要在Android上通过启动一个普通的java进程，但是从后台统计数据上来看在Android4.x上进程无法启动所以找台Nexux4 4.2.2的手机来试果然会崩溃，崩溃日志如下</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">D/AndroidRuntime( 3877): &gt;&gt;&gt;&gt;&gt;&gt; AndroidRuntime START com.android.internal.os.RuntimeInit &lt;&lt;&lt;&lt;&lt;&lt;</span><br><span class="line">D/AndroidRuntime( 3877): CheckJNI is OFF</span><br><span class="line">D/dalvikvm( 3877): Trying to load lib libjavacore.so 0x0</span><br><span class="line">D/dalvikvm( 3877): Added shared lib libjavacore.so 0x0</span><br><span class="line">D/dalvikvm( 3877): Trying to load lib libnativehelper.so 0x0</span><br><span class="line">D/dalvikvm( 3877): Added shared lib libnativehelper.so 0x0</span><br><span class="line">D/dalvikvm( 3877): No JNI_OnLoad found in libnativehelper.so 0x0, skipping init</span><br><span class="line">E/dalvikvm( 3877): Dex cache directory isn&apos;t writable: /data/dalvik-cache</span><br><span class="line">I/dalvikvm( 3877): Unable to open or create cache for /data/data/com.mjar.test/cache/app@data.apk (/data/dalvik-cache/data@data@com.mjar.test@cache@app@data.apk@classes.dex)</span><br><span class="line">E/appproc ( 3877): ERROR: could not find class &apos;cmd.Main&apos;</span><br><span class="line">E/dalvikvm( 3877): JNI posting fatal error: Native registration unable to find class &apos;android/debug/JNITest&apos;; aborting...</span><br><span class="line">I/dalvikvm( 3877): &quot;main&quot; prio=5 tid=1 NATIVE</span><br><span class="line">I/dalvikvm( 3877):   | group=&quot;main&quot; sCount=0 dsCount=0 obj=0x415b7ca8 self=0x6d455010</span><br><span class="line">I/dalvikvm( 3877):   | sysTid=3877 nice=0 sched=0/0 cgrp=default handle=1074467156</span><br><span class="line">I/dalvikvm( 3877):   | state=R schedstat=( 0 0 0 ) utm=19 stm=13 core=0</span><br><span class="line">I/dalvikvm( 3877):   #00  pc 0000132e  /system/lib/libcorkscrew.so (unwind_backtrace_thread+29)</span><br><span class="line">I/dalvikvm( 3877):   #01  pc 00060652  /system/lib/libdvm.so (dvmDumpNativeStack(DebugOutputTarget const*, int)+33)</span><br><span class="line">I/dalvikvm( 3877):   #02  pc 00054640  /system/lib/libdvm.so (dvmDumpThreadEx(DebugOutputTarget const*, Thread*, bool)+395)</span><br><span class="line">I/dalvikvm( 3877):   #03  pc 000546ae  /system/lib/libdvm.so (dvmDumpThread(Thread*, bool)+25)</span><br><span class="line">I/dalvikvm( 3877):   #04  pc 000490c0  /system/lib/libdvm.so</span><br><span class="line">I/dalvikvm( 3877):   #05  pc 00001fa8  /system/lib/libnativehelper.so (jniRegisterNativeMethods+39)</span><br><span class="line">I/dalvikvm( 3877):   #06  pc 0004cd22  /system/lib/libandroid_runtime.so</span><br><span class="line">I/dalvikvm( 3877):   #07  pc 0004d010  /system/lib/libandroid_runtime.so (android::AndroidRuntime::startReg(_JNIEnv*)+23)</span><br><span class="line">I/dalvikvm( 3877):   #08  pc 0004da60  /system/lib/libandroid_runtime.so (android::AndroidRuntime::start(char const*, char const*)+183)</span><br><span class="line">I/dalvikvm( 3877):   #09  pc 0000105a  /system/bin/app_process</span><br><span class="line">I/dalvikvm( 3877):   #10  pc 0000e348  /system/lib/libc.so (__libc_init+47)</span><br><span class="line">I/dalvikvm( 3877):   at dalvik.system.NativeStart.main(Native Method)</span><br><span class="line">I/dalvikvm( 3877):   at dalvik.system.NativeStart.main(Native Method)</span><br><span class="line">I/dalvikvm( 3877): </span><br><span class="line">E/dalvikvm( 3877): VM aborting</span><br></pre></td></tr></table></figure>
 
+<a id="more"></a>
+
 <p>通过分析日志得知崩溃的原因是因为cmd.Main这个类没找到，但是明明在5.0以上的版本是可以执行的所以可以排除类不在dex文件里，正当百思不得其姐的时候定睛一看还有一行很关键的信息  <code>E/dalvikvm( 3877): Dex cache directory isn&#39;t writable: /data/dalvik-cache</code>  看样子跟这个有点关系啊！我们知道在android上加载dex文件时系统会做一些优化以加快运行速度也就是dex2oat的过程优化后的odex文件就存储在<code>/data/dalvik-cache</code>这个目录中，因为我们加载自定义的dex文件所以在执行dex2oat的这个操作也是以普通应用的uid去执行的所以理所当然的会没有权限写入这个目录，但是不写入这个目录dex文件不就无法运行起来到这似乎陷入了一个僵局，没办法只能翻翻系统源码看看有没有什么可操作的空间了。</p>
 <ul>
 <li>我这里以Android4.2.2的源码抓重要的说 感兴趣的同学可以完整的跟一下app_process启动进程的整个流程</li>
@@ -377,6 +379,35 @@
 
     
 
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>赠人玫瑰手有余香</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Kaisar 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Kaisar 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
     
 
     
