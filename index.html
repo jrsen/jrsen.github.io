@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next mist use-motion" lang="zh-Hans">
+<html class="theme-next gemini use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -92,7 +92,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Mist',
+    scheme: 'Gemini',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
@@ -263,7 +263,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Kaisar">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -351,7 +351,6 @@
       
         
           <p>最近遇到一个奇怪的事情，公司有一块业务需要在Android上通过启动一个普通的java进程，但是从后台统计数据上来看在Android4.x上进程无法启动所以找台Nexux4 4.2.2的手机来试果然会崩溃，崩溃日志如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">D/AndroidRuntime( 3877): &gt;&gt;&gt;&gt;&gt;&gt; AndroidRuntime START com.android.internal.os.RuntimeInit &lt;&lt;&lt;&lt;&lt;&lt;</span><br><span class="line">D/AndroidRuntime( 3877): CheckJNI is OFF</span><br><span class="line">D/dalvikvm( 3877): Trying to load lib libjavacore.so 0x0</span><br><span class="line">D/dalvikvm( 3877): Added shared lib libjavacore.so 0x0</span><br><span class="line">D/dalvikvm( 3877): Trying to load lib libnativehelper.so 0x0</span><br><span class="line">D/dalvikvm( 3877): Added shared lib libnativehelper.so 0x0</span><br><span class="line">D/dalvikvm( 3877): No JNI_OnLoad found in libnativehelper.so 0x0, skipping init</span><br><span class="line">E/dalvikvm( 3877): Dex cache directory isn&apos;t writable: /data/dalvik-cache</span><br><span class="line">I/dalvikvm( 3877): Unable to open or create cache for /data/data/com.mjar.test/cache/app@data.apk (/data/dalvik-cache/data@data@com.mjar.test@cache@app@data.apk@classes.dex)</span><br><span class="line">E/appproc ( 3877): ERROR: could not find class &apos;cmd.Main&apos;</span><br><span class="line">E/dalvikvm( 3877): JNI posting fatal error: Native registration unable to find class &apos;android/debug/JNITest&apos;; aborting...</span><br><span class="line">I/dalvikvm( 3877): &quot;main&quot; prio=5 tid=1 NATIVE</span><br><span class="line">I/dalvikvm( 3877):   | group=&quot;main&quot; sCount=0 dsCount=0 obj=0x415b7ca8 self=0x6d455010</span><br><span class="line">I/dalvikvm( 3877):   | sysTid=3877 nice=0 sched=0/0 cgrp=default handle=1074467156</span><br><span class="line">I/dalvikvm( 3877):   | state=R schedstat=( 0 0 0 ) utm=19 stm=13 core=0</span><br><span class="line">I/dalvikvm( 3877):   #00  pc 0000132e  /system/lib/libcorkscrew.so (unwind_backtrace_thread+29)</span><br><span class="line">I/dalvikvm( 3877):   #01  pc 00060652  /system/lib/libdvm.so (dvmDumpNativeStack(DebugOutputTarget const*, int)+33)</span><br><span class="line">I/dalvikvm( 3877):   #02  pc 00054640  /system/lib/libdvm.so (dvmDumpThreadEx(DebugOutputTarget const*, Thread*, bool)+395)</span><br><span class="line">I/dalvikvm( 3877):   #03  pc 000546ae  /system/lib/libdvm.so (dvmDumpThread(Thread*, bool)+25)</span><br><span class="line">I/dalvikvm( 3877):   #04  pc 000490c0  /system/lib/libdvm.so</span><br><span class="line">I/dalvikvm( 3877):   #05  pc 00001fa8  /system/lib/libnativehelper.so (jniRegisterNativeMethods+39)</span><br><span class="line">I/dalvikvm( 3877):   #06  pc 0004cd22  /system/lib/libandroid_runtime.so</span><br><span class="line">I/dalvikvm( 3877):   #07  pc 0004d010  /system/lib/libandroid_runtime.so (android::AndroidRuntime::startReg(_JNIEnv*)+23)</span><br><span class="line">I/dalvikvm( 3877):   #08  pc 0004da60  /system/lib/libandroid_runtime.so (android::AndroidRuntime::start(char const*, char const*)+183)</span><br><span class="line">I/dalvikvm( 3877):   #09  pc 0000105a  /system/bin/app_process</span><br><span class="line">I/dalvikvm( 3877):   #10  pc 0000e348  /system/lib/libc.so (__libc_init+47)</span><br><span class="line">I/dalvikvm( 3877):   at dalvik.system.NativeStart.main(Native Method)</span><br><span class="line">I/dalvikvm( 3877):   at dalvik.system.NativeStart.main(Native Method)</span><br><span class="line">I/dalvikvm( 3877): </span><br><span class="line">E/dalvikvm( 3877): VM aborting</span><br></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2019/11/17/Android%E4%BD%8E%E7%89%88%E6%9C%AC-4-x-%E6%97%A0%E6%B3%95%E9%80%9A%E8%BF%87app-process%E5%90%AF%E5%8A%A8java%E8%BF%9B%E7%A8%8B%E8%AF%A6%E8%A7%A3/#more" rel="contents">
@@ -426,6 +425,10 @@
       <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Kaisar" />
             
               <p class="site-author-name" itemprop="name">Kaisar</p>
               <p class="site-description motion-element" itemprop="description"></p>
@@ -504,7 +507,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -522,7 +525,7 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
 
 
 
@@ -628,6 +631,13 @@
 
   
   
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
 
   
 
