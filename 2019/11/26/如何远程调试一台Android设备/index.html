@@ -79,11 +79,12 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="狂人日记">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;index.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何远程调试一台Android设备">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E4%B8%80%E5%8F%B0Android%E8%AE%BE%E5%A4%87&#x2F;index.html">
 <meta property="og:site_name" content="狂人日记">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-11-26T07:17:00.029Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -114,13 +115,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/11/26/如何远程调试一台Android设备/"/>
 
 
 
 
 
-  <title>狂人日记</title>
+  <title>如何远程调试一台Android设备 | 狂人日记</title>
   
 
 
@@ -149,8 +150,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -243,156 +243,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/26/%E5%A6%82%E4%BD%95%E5%9C%A8Android%E4%B8%8A%E9%80%9A%E8%BF%87pm%E5%91%BD%E4%BB%A4%E5%AE%89%E8%A3%85%E6%8B%86%E5%88%86%E5%8C%85/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Kaisar">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="狂人日记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/26/%E5%A6%82%E4%BD%95%E5%9C%A8Android%E4%B8%8A%E9%80%9A%E8%BF%87pm%E5%91%BD%E4%BB%A4%E5%AE%89%E8%A3%85%E6%8B%86%E5%88%86%E5%8C%85/" itemprop="url">如何在Android上通过pm命令安装拆分包</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-26T14:17:36+08:00">
-                2019-11-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android%E9%BB%91%E7%A7%91%E6%8A%80/" itemprop="url" rel="index">
-                    <span itemprop="name">Android黑科技</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="如何在Android上通过pm命令安装拆分包"><a href="#如何在Android上通过pm命令安装拆分包" class="headerlink" title="如何在Android上通过pm命令安装拆分包"></a>如何在Android上通过pm命令安装拆分包</h1><ol>
-<li>首先需要先调用<code>pm install-create -S [size]</code>创建一个install session 其中<code>[size]</code>是指所有拆分文件的总字节数，不过不加<code>-S [size]</code>貌似也是可以的，命令执行完会返回一个session id 这个session会在下面用到。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pm install-create -S 28658294</span><br><span class="line">Success: created install session [1691973442]</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/11/26/%E5%A6%82%E4%BD%95%E5%9C%A8Android%E4%B8%8A%E9%80%9A%E8%BF%87pm%E5%91%BD%E4%BB%A4%E5%AE%89%E8%A3%85%E6%8B%86%E5%88%86%E5%8C%85/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
 
   
 
@@ -422,9 +275,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/26/%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E4%B8%80%E5%8F%B0Android%E8%AE%BE%E5%A4%87/" itemprop="url">如何远程调试一台Android设备</a></h1>
+          <h1 class="post-title" itemprop="name headline">如何远程调试一台Android设备</h1>
         
 
         <div class="post-meta">
@@ -497,10 +348,6 @@
 
       
         
-          
-            
-          
-        
       
     </div>
     
@@ -510,6 +357,35 @@
     
 
     
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>赠人玫瑰手有余香</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Kaisar 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Kaisar 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
 
     
 
@@ -517,158 +393,32 @@
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/17/Android%E4%BD%8E%E7%89%88%E6%9C%AC-4-x-%E6%97%A0%E6%B3%95%E9%80%9A%E8%BF%87app-process%E5%90%AF%E5%8A%A8java%E8%BF%9B%E7%A8%8B%E8%AF%A6%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Kaisar">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="狂人日记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/17/Android%E4%BD%8E%E7%89%88%E6%9C%AC-4-x-%E6%97%A0%E6%B3%95%E9%80%9A%E8%BF%87app-process%E5%90%AF%E5%8A%A8java%E8%BF%9B%E7%A8%8B%E8%AF%A6%E8%A7%A3/" itemprop="url">Android低版本(4.x)无法通过app_process启动java进程问题详解</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-17T01:53:46+08:00">
-                2019-11-17
-              </time>
+              <a href="/2019/11/17/Android%E4%BD%8E%E7%89%88%E6%9C%AC-4-x-%E6%97%A0%E6%B3%95%E9%80%9A%E8%BF%87app-process%E5%90%AF%E5%8A%A8java%E8%BF%9B%E7%A8%8B%E8%AF%A6%E8%A7%A3/" rel="next" title="Android低版本(4.x)无法通过app_process启动java进程问题详解">
+                <i class="fa fa-chevron-left"></i> Android低版本(4.x)无法通过app_process启动java进程问题详解
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
+              <a href="/2019/11/26/%E5%A6%82%E4%BD%95%E5%9C%A8Android%E4%B8%8A%E9%80%9A%E8%BF%87pm%E5%91%BD%E4%BB%A4%E5%AE%89%E8%A3%85%E6%8B%86%E5%88%86%E5%8C%85/" rel="prev" title="如何在Android上通过pm命令安装拆分包">
+                如何在Android上通过pm命令安装拆分包 <i class="fa fa-chevron-right"></i>
+              </a>
             
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android%E7%96%91%E9%9A%BE%E6%9D%82%E7%97%87/" itemprop="url" rel="index">
-                    <span itemprop="name">Android疑难杂症</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <p>最近遇到一个奇怪的事情，公司有一块业务需要在Android上通过启动一个普通的java进程，但是从后台统计数据上来看在Android4.x上进程无法启动所以找台Nexux4 4.2.2的手机来试果然会崩溃，崩溃日志如下</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/11/17/Android%E4%BD%8E%E7%89%88%E6%9C%AC-4-x-%E6%97%A0%E6%B3%95%E9%80%9A%E8%BF%87app-process%E5%90%AF%E5%8A%A8java%E8%BF%9B%E7%A8%8B%E8%AF%A6%E8%A7%A3/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -678,10 +428,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -689,6 +440,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -928,6 +683,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
