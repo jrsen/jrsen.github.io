@@ -79,11 +79,14 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="狂人日记">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;index.html">
+<meta name="description" content="我想做过Xposed模块开发的一定对调试模块必须要重启手机这个机制不陌生， 拜这个机制所赐每次开发起来苦不堪言。稍微改点东西就需要重启手机少则几十秒要是碰到性能稍差一点的手机几分钟也是有可能的。那我们今天就来好好聊聊怎么才能让修改后的代码即时生效呢？首先要搞清楚这个问题还必须从为什么插件每次修改都要重启手机说起，我们可以通过Xposed开发文档了解到Xposed的工作方式是通过替换&#x2F;system">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何调试Xposed模块不用重启">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;29&#x2F;%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95Xposed%E6%A8%A1%E5%9D%97%E4%B8%8D%E7%94%A8%E9%87%8D%E5%90%AF&#x2F;index.html">
 <meta property="og:site_name" content="狂人日记">
+<meta property="og:description" content="我想做过Xposed模块开发的一定对调试模块必须要重启手机这个机制不陌生， 拜这个机制所赐每次开发起来苦不堪言。稍微改点东西就需要重启手机少则几十秒要是碰到性能稍差一点的手机几分钟也是有可能的。那我们今天就来好好聊聊怎么才能让修改后的代码即时生效呢？首先要搞清楚这个问题还必须从为什么插件每次修改都要重启手机说起，我们可以通过Xposed开发文档了解到Xposed的工作方式是通过替换&#x2F;system">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-11-29T09:25:23.317Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -114,13 +117,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/11/29/如何调试Xposed模块不用重启/"/>
 
 
 
 
 
-  <title>狂人日记</title>
+  <title>如何调试Xposed模块不用重启 | 狂人日记</title>
   
 
 
@@ -149,8 +152,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -243,9 +245,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -275,9 +277,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/29/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95Xposed%E6%A8%A1%E5%9D%97%E4%B8%8D%E7%94%A8%E9%87%8D%E5%90%AF/" itemprop="url">如何调试Xposed模块不用重启</a></h1>
+          <h1 class="post-title" itemprop="name headline">如何调试Xposed模块不用重启</h1>
         
 
         <div class="post-meta">
@@ -349,18 +349,17 @@
       
 
       
-        
-          <blockquote>
+        <blockquote>
 <p>我想做过Xposed模块开发的一定对调试模块必须要重启手机这个机制不陌生， 拜这个机制所赐每次开发起来苦不堪言。稍微改点东西就需要重启手机少则几十秒要是碰到性能稍差一点的手机几分钟也是有可能的。那我们今天就来好好聊聊怎么才能让修改后的代码即时生效呢？首先要搞清楚这个问题还必须从为什么插件每次修改都要重启手机说起，我们可以通过<a href="https://github.com/rovo89/XposedBridge/wiki/Development-tutorial" target="_blank" rel="noopener">Xposed开发文档</a>了解到Xposed的工作方式是通过替换/system/bin/app_process这个二进制文件来实现的进程注入的,我们知道app_process是所有进程的启动入口所以xposed替换了这个文件修改了内部执行逻辑优先去加载我们的插件然后再去加载原始的App代码所以才得以实现各种hook，但是问题就出现在加载插件上了，默认的第一次加载插件时系统会在<code>/data/dalvik-cache/</code>创建一份字节码文件给需虚拟机执行，但是因为这个文件只会在第一次加载的时候创建所以当我们修改了插件后再安装这个文件是不会变的，这也就导致我们的改动不会立即生效需要重启手机让系统生成一个新的字节码文件，那肯定有小伙伴会想那我手动把这个字节码文件删了呢？很遗憾我在Android7.0上尝试了一下并未成功原因未知。</p>
 </blockquote>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/11/29/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95Xposed%E6%A8%A1%E5%9D%97%E4%B8%8D%E7%94%A8%E9%87%8D%E5%90%AF/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+<a id="more"></a>
+<blockquote>
+<p>好了既然我们知道问题产生的原因那我们就可以找到相应的解决办法，知己知彼百战不殆我们可以在Xposed加载我们插件代码的时候加一层代理用来动态找我们的插件代码位置这样就可以实现不用重启手机即时生效了当然如果仅hook应用了的话还需要强行停止一下应用以确保进程重新加载新代码，如果hook <code>system_server</code>进程了的话那还是需要重启手机的因为需要让<code>system_server</code>进程重新启动加载新的插件代码。</p>
+</blockquote>
+<blockquote>
+<p>下面是完整的动态加载代码可以直接使用，仅在调试时使用请勿在发布版本中用!</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line">package com.viewblocker.jrsen.injection;</span><br><span class="line"></span><br><span class="line">import android.os.Process;</span><br><span class="line">import android.util.Log;</span><br><span class="line"></span><br><span class="line">import com.viewblocker.jrsen.BuildConfig;</span><br><span class="line"></span><br><span class="line">import org.xmlpull.v1.XmlPullParser;</span><br><span class="line">import org.xmlpull.v1.XmlPullParserFactory;</span><br><span class="line"></span><br><span class="line">import java.io.BufferedReader;</span><br><span class="line">import java.io.File;</span><br><span class="line">import java.io.FileFilter;</span><br><span class="line">import java.io.FileReader;</span><br><span class="line">import java.io.IOException;</span><br><span class="line">import java.io.InputStreamReader;</span><br><span class="line"></span><br><span class="line">import dalvik.system.PathClassLoader;</span><br><span class="line">import de.robv.android.xposed.IXposedHookLoadPackage;</span><br><span class="line">import de.robv.android.xposed.callbacks.XC_LoadPackage;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 开发更新模块无需重启 需要在xposed_init指定</span><br><span class="line"> */</span><br><span class="line">public final class HotLoader implements IXposedHookLoadPackage &#123;</span><br><span class="line"></span><br><span class="line">    private static final String TAG = &quot;HotLoader&quot;;</span><br><span class="line">    private static final String APPLICATION_ID = BuildConfig.APPLICATION_ID;//这个地方改为你模块的包名</span><br><span class="line">    private static final String MAIN_LOADER = BlockerInjector.class.getName();//这个地方改为你实际的注入类</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            String dexPath = Process.myUid() == Process.SYSTEM_UID ? getDexPathFromSystemFile() : getDexPathFromPackageService();</span><br><span class="line">            Log.i(TAG, &quot;hot load dex path:&quot; + dexPath + &quot; uid=&quot; + Process.myUid());</span><br><span class="line">            PathClassLoader classLoader = new PathClassLoader(dexPath, ClassLoader.getSystemClassLoader());</span><br><span class="line">            Class&lt;?&gt; Clazz = classLoader.loadClass(MAIN_LOADER);</span><br><span class="line">            IXposedHookLoadPackage injector = (IXposedHookLoadPackage) Clazz.newInstance();</span><br><span class="line">            injector.handleLoadPackage(lpparam);</span><br><span class="line">        &#125; catch (Throwable t) &#123;</span><br><span class="line">            Log.e(TAG, &quot;loader exception&quot;, t);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private String getDexPathFromSystemFile() &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();</span><br><span class="line">            XmlPullParser parser = factory.newPullParser();</span><br><span class="line">            parser.setInput(new FileReader(&quot;/data/system/packages.xml&quot;));</span><br><span class="line">            int eventType = parser.getEventType();</span><br><span class="line">            while (eventType != XmlPullParser.END_DOCUMENT) &#123;</span><br><span class="line">                if (eventType == XmlPullParser.START_TAG) &#123;</span><br><span class="line">                    String nodeName = parser.getName();</span><br><span class="line">                    if (&quot;package&quot;.equals(nodeName) &amp;&amp; APPLICATION_ID.equals(parser.getAttributeValue(null, &quot;name&quot;))) &#123;</span><br><span class="line">                        String codePath = parser.getAttributeValue(null, &quot;codePath&quot;);</span><br><span class="line">                        File[] dexFiles = new File(codePath).listFiles(new FileFilter() &#123;</span><br><span class="line">                            @Override</span><br><span class="line">                            public boolean accept(File pathname) &#123;</span><br><span class="line">                                return pathname.getName().endsWith(&quot;.apk&quot;);</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;);</span><br><span class="line">                        return dexFiles[0].getAbsolutePath();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                eventType = parser.next();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            throw new RuntimeException(String.format(&quot;Can&apos;t resolve %s dex path&apos;&quot;, APPLICATION_ID), e);</span><br><span class="line">        &#125;</span><br><span class="line">        throw new RuntimeException(String.format(&quot;Can&apos;t resolve %s dex path&apos;&quot;, APPLICATION_ID));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private String getDexPathFromPackageService() throws IOException &#123;</span><br><span class="line">        java.lang.Process process = Runtime.getRuntime().exec(&quot;pm path &quot; + APPLICATION_ID);</span><br><span class="line">        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));</span><br><span class="line">        String output = reader.readLine();</span><br><span class="line">        if (output == null || output.split(&quot;:&quot;).length != 2) &#123;</span><br><span class="line">            throw new RuntimeException(String.format(&quot;Can&apos;t resolve %s dex path&apos;&quot;, APPLICATION_ID));</span><br><span class="line">        &#125;</span><br><span class="line">        return output.trim().split(&quot;:&quot;)[1];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -370,6 +369,35 @@
     
 
     
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>赠人玫瑰手有余香</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Kaisar 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Kaisar 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
 
     
 
@@ -377,159 +405,28 @@
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/26/%E5%A6%82%E4%BD%95%E5%9C%A8Android%E4%B8%8A%E9%80%9A%E8%BF%87pm%E5%91%BD%E4%BB%A4%E5%AE%89%E8%A3%85%E6%8B%86%E5%88%86%E5%8C%85/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Kaisar">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="狂人日记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/26/%E5%A6%82%E4%BD%95%E5%9C%A8Android%E4%B8%8A%E9%80%9A%E8%BF%87pm%E5%91%BD%E4%BB%A4%E5%AE%89%E8%A3%85%E6%8B%86%E5%88%86%E5%8C%85/" itemprop="url">如何在Android上通过pm命令安装拆分包</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-26T14:17:36+08:00">
-                2019-11-26
-              </time>
+              <a href="/2019/11/26/%E5%A6%82%E4%BD%95%E5%9C%A8Android%E4%B8%8A%E9%80%9A%E8%BF%87pm%E5%91%BD%E4%BB%A4%E5%AE%89%E8%A3%85%E6%8B%86%E5%88%86%E5%8C%85/" rel="next" title="如何在Android上通过pm命令安装拆分包">
+                <i class="fa fa-chevron-left"></i> 如何在Android上通过pm命令安装拆分包
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android%E9%BB%91%E7%A7%91%E6%8A%80/" itemprop="url" rel="index">
-                    <span itemprop="name">Android黑科技</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <ol>
-<li>首先需要先调用<code>pm install-create -S [size]</code>创建一个install session 其中<code>[size]</code>是指所有拆分文件的总字节数，不过不加<code>-S [size]</code>貌似也是可以的，命令执行完会返回一个session id 这个session会在下面用到。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pm install-create -S 28658294</span><br><span class="line">Success: created install session [1691973442]</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/11/26/%E5%A6%82%E4%BD%95%E5%9C%A8Android%E4%B8%8A%E9%80%9A%E8%BF%87pm%E5%91%BD%E4%BB%A4%E5%AE%89%E8%A3%85%E6%8B%86%E5%88%86%E5%8C%85/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -539,297 +436,11 @@
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/26/%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E4%B8%80%E5%8F%B0Android%E8%AE%BE%E5%A4%87/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Kaisar">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="狂人日记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/26/%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E4%B8%80%E5%8F%B0Android%E8%AE%BE%E5%A4%87/" itemprop="url">如何远程调试一台Android设备</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-26T14:16:17+08:00">
-                2019-11-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android%E9%BB%91%E7%A7%91%E6%8A%80/" itemprop="url" rel="index">
-                    <span itemprop="name">Android黑科技</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/17/Android%E4%BD%8E%E7%89%88%E6%9C%AC-4-x-%E6%97%A0%E6%B3%95%E9%80%9A%E8%BF%87app-process%E5%90%AF%E5%8A%A8java%E8%BF%9B%E7%A8%8B%E8%AF%A6%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Kaisar">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="狂人日记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/17/Android%E4%BD%8E%E7%89%88%E6%9C%AC-4-x-%E6%97%A0%E6%B3%95%E9%80%9A%E8%BF%87app-process%E5%90%AF%E5%8A%A8java%E8%BF%9B%E7%A8%8B%E8%AF%A6%E8%A7%A3/" itemprop="url">Android低版本(4.x)无法通过app_process启动java进程问题详解</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-17T01:53:46+08:00">
-                2019-11-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android%E7%96%91%E9%9A%BE%E6%9D%82%E7%97%87/" itemprop="url" rel="index">
-                    <span itemprop="name">Android疑难杂症</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>最近遇到一个奇怪的事情，公司有一块业务需要在Android上通过启动一个普通的java进程，但是从后台统计数据上来看在Android4.x上进程无法启动所以找台Nexux4 4.2.2的手机来试果然会崩溃，崩溃日志如下</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/11/17/Android%E4%BD%8E%E7%89%88%E6%9C%AC-4-x-%E6%97%A0%E6%B3%95%E9%80%9A%E8%BF%87app-process%E5%90%AF%E5%8A%A8java%E8%BF%9B%E7%A8%8B%E8%AF%A6%E8%A7%A3/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
@@ -837,6 +448,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -1076,6 +691,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

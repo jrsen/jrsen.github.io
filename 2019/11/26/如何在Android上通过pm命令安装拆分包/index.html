@@ -79,14 +79,14 @@
 
 
 
-<meta name="description" content="如何在Android上通过pm命令安装拆分包 首先需要先调用pm install-create -S [size]创建一个install session 其中[size]是指所有拆分文件的总字节数，不过不加-S [size]貌似也是可以的，命令执行完会返回一个session id 这个session会在下面用到。12pm install-create -S 28658294Success: cre">
+<meta name="description" content="首先需要先调用pm install-create -S [size]创建一个install session 其中[size]是指所有拆分文件的总字节数，不过不加-S [size]貌似也是可以的，命令执行完会返回一个session id 这个session会在下面用到。12pm install-create -S 28658294Success: created install session [">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何在Android上通过pm命令安装拆分包">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;%E5%A6%82%E4%BD%95%E5%9C%A8Android%E4%B8%8A%E9%80%9A%E8%BF%87pm%E5%91%BD%E4%BB%A4%E5%AE%89%E8%A3%85%E6%8B%86%E5%88%86%E5%8C%85&#x2F;index.html">
 <meta property="og:site_name" content="狂人日记">
-<meta property="og:description" content="如何在Android上通过pm命令安装拆分包 首先需要先调用pm install-create -S [size]创建一个install session 其中[size]是指所有拆分文件的总字节数，不过不加-S [size]貌似也是可以的，命令执行完会返回一个session id 这个session会在下面用到。12pm install-create -S 28658294Success: cre">
+<meta property="og:description" content="首先需要先调用pm install-create -S [size]创建一个install session 其中[size]是指所有拆分文件的总字节数，不过不加-S [size]貌似也是可以的，命令执行完会返回一个session id 这个session会在下面用到。12pm install-create -S 28658294Success: created install session [">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-26T07:18:14.641Z">
+<meta property="og:updated_time" content="2019-11-29T09:25:59.298Z">
 <meta name="twitter:card" content="summary">
 
 
@@ -349,7 +349,7 @@
       
 
       
-        <h1 id="如何在Android上通过pm命令安装拆分包"><a href="#如何在Android上通过pm命令安装拆分包" class="headerlink" title="如何在Android上通过pm命令安装拆分包"></a>如何在Android上通过pm命令安装拆分包</h1><ol>
+        <ol>
 <li>首先需要先调用<code>pm install-create -S [size]</code>创建一个install session 其中<code>[size]</code>是指所有拆分文件的总字节数，不过不加<code>-S [size]</code>貌似也是可以的，命令执行完会返回一个session id 这个session会在下面用到。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pm install-create -S 28658294</span><br><span class="line">Success: created install session [1691973442]</span><br></pre></td></tr></table></figure>
 <a id="more"></a></li>
 <li>写入拆分包<code>pm install-write -S [size] [session-id] [file-name] [file-path]</code> 如果有多个拆分包需要写入多次</li>
@@ -433,6 +433,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2019/11/29/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95Xposed%E6%A8%A1%E5%9D%97%E4%B8%8D%E7%94%A8%E9%87%8D%E5%90%AF/" rel="prev" title="如何调试Xposed模块不用重启">
+                如何调试Xposed模块不用重启 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -512,7 +516,7 @@
               
                 <a href="/archives%7C%7C%20archive">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -523,7 +527,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index-1.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -574,7 +578,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#如何在Android上通过pm命令安装拆分包"><span class="nav-number">1.</span> <span class="nav-text">如何在Android上通过pm命令安装拆分包</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#或者可以使用下面的脚本自动安装"><span class="nav-number">1.1.</span> <span class="nav-text">或者可以使用下面的脚本自动安装</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#或者可以使用下面的脚本自动安装"><span class="nav-number">1.</span> <span class="nav-text">或者可以使用下面的脚本自动安装</span></a></li></ol></div>
             
 
           </div>
