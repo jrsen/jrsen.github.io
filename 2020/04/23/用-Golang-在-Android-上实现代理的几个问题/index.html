@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="转自:https:&#x2F;&#x2F;blog.dio.wtf&#x2F;post&#x2F;tips-for-golang-proxy-for-android&#x2F; 仅供备份  用 Golang 来实现的代理不要太多，像 V2Ray，Brook，Clash。一方面得益于 Golang 标准库对于网络编程的支持，另一方面也是由于其便利的交叉编译。如果要在 Android 上用 Golang 实现一套代理方案，还是必须要处理一些问题，或">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用 Golang 在 Android 上实现代理的几个问题">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;04&#x2F;23&#x2F;%E7%94%A8-Golang-%E5%9C%A8-Android-%E4%B8%8A%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%90%86%E7%9A%84%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98&#x2F;index.html">
+<meta property="og:site_name" content="狂人日记">
+<meta property="og:description" content="转自:https:&#x2F;&#x2F;blog.dio.wtf&#x2F;post&#x2F;tips-for-golang-proxy-for-android&#x2F; 仅供备份  用 Golang 来实现的代理不要太多，像 V2Ray，Brook，Clash。一方面得益于 Golang 标准库对于网络编程的支持，另一方面也是由于其便利的交叉编译。如果要在 Android 上用 Golang 实现一套代理方案，还是必须要处理一些问题，或">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-04-23T13:57:54.507Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/23/用-Golang-在-Android-上实现代理的几个问题/"/>
+
+
+
+
+
+  <title>用 Golang 在 Android 上实现代理的几个问题 | 狂人日记</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e1652ff183810cf4d455e5b84bbb89f2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">狂人日记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Kaisar's Notes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/23/%E7%94%A8-Golang-%E5%9C%A8-Android-%E4%B8%8A%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%90%86%E7%9A%84%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Kaisar">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="狂人日记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">用 Golang 在 Android 上实现代理的几个问题</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-23T17:42:30+08:00">
+                2020-04-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
+                    <span itemprop="name">Android开发实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/23/%E7%94%A8-Golang-%E5%9C%A8-Android-%E4%B8%8A%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%90%86%E7%9A%84%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/04/23/%E7%94%A8-Golang-%E5%9C%A8-Android-%E4%B8%8A%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%90%86%E7%9A%84%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>转自:<a href="https://blog.dio.wtf/post/tips-for-golang-proxy-for-android/" target="_blank" rel="noopener">https://blog.dio.wtf/post/tips-for-golang-proxy-for-android/</a> 仅供备份</p>
+</blockquote>
+<p>用 Golang 来实现的代理不要太多，像 <a href="https://github.com/v2ray/v2ray-core" target="_blank" rel="noopener">V2Ray</a>，<a href="https://github.com/txthinking/brook" target="_blank" rel="noopener">Brook</a>，<a href="https://github.com/Dreamacro/clash" target="_blank" rel="noopener">Clash</a>。一方面得益于 Golang 标准库对于网络编程的支持，另一方面也是由于其便利的交叉编译。如果要在 Android 上用 Golang 实现一套代理方案，还是必须要处理一些问题，或者说是所有的代理方案都要解决的平台特性。</p>
+<h2 id="IPC-传递文件描述符"><a href="#IPC-传递文件描述符" class="headerlink" title="IPC 传递文件描述符"></a>IPC 传递文件描述符</h2><p>Android 上使用 <a href="https://developer.android.com/reference/android/net/VpnService" target="_blank" rel="noopener">VpnService</a> 由系统创建一个 TUN 虚拟网卡并接收所有的流量，API 会返回一个 file descriptor，通过这个 FD 可以读取/写入 IP packet。</p>
+<p>为了稳定性和性能考虑，我们通常会将代理程序放到一个单独的进程里。但是在 Android 的阉割版 Linux 环境下，子进程是无法访问父进程的 FD。这里就需要用到 Linux 通用的进程间共享 FD 的方案，也就是给 Unix Socket 设置 <code>SCM_RIGHTS</code> 标识，然后用 <code>recvmsg</code> 和 <code>sendmsg</code> 来收发。在 Android 和 Golang 中都有对应的 API。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> LocalSocket.setFileDescriptorsForSend (FileDescriptor[] fds)</span><br><span class="line"><span class="keyword">public</span> FileDescriptor[] LocalSocket.getAncillaryFileDescriptors ()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// UnixRights encodes file descriptors into a socket control message</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">syscall</span>.<span class="title">UnixRights</span><span class="params">(fds ...<span class="keyword">int</span>)</span> []<span class="title">byte</span></span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">syscall</span>.<span class="title">Sendmsg</span><span class="params">(fd <span class="keyword">int</span>, p, oob []<span class="keyword">byte</span>, to Sockaddr, flags <span class="keyword">int</span>)</span> <span class="params">(err error)</span></span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">syscall</span>.<span class="title">Recvmsg</span><span class="params">(fd <span class="keyword">int</span>, p, oob []<span class="keyword">byte</span>, flags <span class="keyword">int</span>)</span> <span class="params">(n, oobn <span class="keyword">int</span>, recvflags <span class="keyword">int</span>, from Sockaddr, err error)</span></span></span><br><span class="line"><span class="comment">// ParseSocketControlMessage parses b as an array of socket control</span></span><br><span class="line"><span class="comment">// messages.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">syscall</span>.<span class="title">ParseSocketControlMessage</span><span class="params">(b []<span class="keyword">byte</span>)</span> <span class="params">([]SocketControlMessage, error)</span></span></span><br><span class="line"><span class="comment">// ParseUnixRights decodes a socket control message that contains an</span></span><br><span class="line"><span class="comment">// integer array of open file descriptors from another process.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">syscall</span>.<span class="title">ParseUnixRights</span><span class="params">(m *SocketControlMessage)</span> <span class="params">([]<span class="keyword">int</span>, error)</span></span></span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+
+<h2 id="Socket-建连之前-protect-文件描述符"><a href="#Socket-建连之前-protect-文件描述符" class="headerlink" title="Socket 建连之前 protect 文件描述符"></a>Socket 建连之前 protect 文件描述符</h2><p>如果我们在创建 TUN 的时候（启动 VpnService ）设置的路由是 0.0.0.0/0 的情况下，所有的本地流量都会经过 TUN 设备，包括代理应用的数据包，这样就会进入一个死循环。这里需要用到 VpnService 的 <a href="https://developer.android.com/reference/android/net/VpnService#protect(int)" target="_blank" rel="noopener">protect</a> 函数，这个函数接收一个 TCP/UDP 的 Socket 或者一个 FD。经过 protected 的 Socket 收发的数据包就不在经过 TUN 设备了。</p>
+<p>Golang 的 net 库对网络做了很好的封装，比如创建一个TCP连接，使用 net.Dial 就可以拿到一个成功连接 net.Conn。但是在 Android 上，我们必须先拿到 Socket 的 FD 并调用 protect，否则 net.Dial 只会返回 error。</p>
+<p>基于 V2Ray 实现的代理（<a href="https://github.com/xiaokangwang/AndroidLibV2ray/blob/master/VPN/vpnservice_support.go" target="_blank" rel="noopener">AndroidLibV2ray</a>和 <a href="https://github.com/2dust/v2rayNG/blob/1.1.12/AndroidLibV2rayLite/VPN/vpnservice_support.go" target="_blank" rel="noopener">v2rayNG</a>）通常是直接创建 unix.Socket 然后调用 unix.Connect 建立连接，再对外封装成 net.Dial 方法。</p>
+<p>在 Go 1.11 里标准库给 net.Dial 添加了 <a href="https://golang.org/pkg/net/#Dialer.Control" target="_blank" rel="noopener">Dialer.Control</a> 这个字段，相当于给 net.Dialer 注册了一个Socket创建之后、连接建立之前的回调，可以很方便的拿到 net.Dialer 的 FD。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">d := &amp;net.Dialer&#123;&#125;</span><br><span class="line">d.Control = <span class="function"><span class="keyword">func</span><span class="params">(network, address <span class="keyword">string</span>, c syscall.RawConn)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> c.Control(<span class="function"><span class="keyword">func</span><span class="params">(fd <span class="keyword">uintptr</span>)</span></span> &#123;</span><br><span class="line">        <span class="comment">// Access socket fd</span></span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>P.S. 这里也可以通过 <a href="https://developer.android.com/reference/android/net/VpnService.Builder.html#addDisallowedApplication(java.lang.String)" target="_blank" rel="noopener">VpnService.Builder.addDisallowedApplication</a> 把代理应用排除在外，这样就不需要使用 protect 了🤣。可以参考最近刚刚开源的 <a href="https://github.com/Kr328/ClashForAndroid/blob/24e1732091c1a5089858bfefc776fe229367b997/service/src/main/java/com/github/kr328/clash/service/TunService.kt#L149" target="_blank" rel="noopener">ClashForAndroid</a></p>
+<h2 id="选择-Gomobile-还是编译成-Exectuable-Binary"><a href="#选择-Gomobile-还是编译成-Exectuable-Binary" class="headerlink" title="选择 Gomobile 还是编译成 Exectuable Binary"></a>选择 Gomobile 还是编译成 Exectuable Binary</h2><p>Golang 官方实现了 <a href="https://github.com/golang/mobile" target="_blank" rel="noopener">Gomobile</a> 用于编译移动端可用的 Golang 程序。在 Android 平台上编译的是包含 JNI interface 的 AAR 文件，可以直接从 Java 调用 Golang 代码。所以这种情况下通常将 Gomobile 和 VpnService 运行在同一个进程中，这样的话就不需要上面提到的 IPC 的工作了。这样实现的项目有 <a href="https://github.com/2dust/v2rayNG" target="_blank" rel="noopener">V2RayNG</a> 和 <a href="https://github.com/eycorsican/kitsunebi-android" target="_blank" rel="noopener">kitsunebi-android</a>。</p>
+<div id="sequence-0"></div>
+
+
+<p>另一种做法是将 Golang 编译成可执行的二进制文件，然后通过 <code>ProcessBuilder</code> 或者 <code>Runtime.exec</code> 运行在独立进程里，需要 Unix Socket 进行进程间通讯。因为 ShadowSocks-Android 就是这样的实现的，所以也算是一个比较稳定主流的方案，这样实现的项目有 <a href="https://github.com/Kr328/ClashForAndroid" target="_blank" rel="noopener">ClashForAndroid</a>。</p>
+<div id="sequence-1"></div>
+
+<p>目前来看两种方案都可以很好的工作在 Android 上，Gomobile 的优点就是 Java-&gt;Golang 调用比较方便，编译简单，但是相对的 Golang-&gt;Java 只能通过实现接口，另外包体积较大。具体选哪种就见仁见智了。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="https://fqrouter.tumblr.com/post/51474945203/socks代理转vpn" target="_blank" rel="noopener">socks代理转VPN</a><script src="https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js"></script><script src="https://cdn.bootcss.com/raphael/2.2.8/raphael.min.js"></script><script src="https://cdn.bootcss.com/snap.svg/0.5.1/snap.svg-min.js"></script><script src="https://cdn.bootcss.com/underscore.js/1.9.1/underscore-min.js"></script><script src="https://cdn.bootcss.com/js-sequence-diagrams/1.0.6/sequence-diagram-min.js"></script><textarea id="sequence-0-code" style="display: none">App->VpnService: AIDL
+note over App:Main Process
+VpnService-->Gomobile:JNI
+note over VpnService:VPN Process
+Gomobile-->VpnService:JNI
+note over Gomobile:VPN Process
+VpnService->App:AIDL</textarea><textarea id="sequence-0-options" style="display: none">{"theme":"simple"}</textarea><script>  var code = document.getElementById("sequence-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("sequence-0-options").value));  var diagram = Diagram.parse(code);  diagram.drawSVG("sequence-0", options);</script><textarea id="sequence-1-code" style="display: none">App->VpnService:AIDL
+note over App:Main Process
+VpnService->Binary:Unix Socket
+note over VpnService:VPN Process
+Binary->VpnService:Unix Socket
+note over Binary:Isolate Process
+VpnService->App:AIDL</textarea><textarea id="sequence-1-options" style="display: none">{"theme":"simple"}</textarea><script>  var code = document.getElementById("sequence-1-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("sequence-1-options").value));  var diagram = Diagram.parse(code);  diagram.drawSVG("sequence-1", options);</script></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>赠人玫瑰手有余香</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Kaisar 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Kaisar 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/29/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95Xposed%E6%A8%A1%E5%9D%97%E4%B8%8D%E7%94%A8%E9%87%8D%E5%90%AF/" rel="next" title="如何调试Xposed模块不用重启">
+                <i class="fa fa-chevron-left"></i> 如何调试Xposed模块不用重启
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Kaisar" />
+            
+              <p class="site-author-name" itemprop="name">Kaisar</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index-1.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/jrsen" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:anjonadmin@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#IPC-传递文件描述符"><span class="nav-number">1.</span> <span class="nav-text">IPC 传递文件描述符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Socket-建连之前-protect-文件描述符"><span class="nav-number">2.</span> <span class="nav-text">Socket 建连之前 protect 文件描述符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择-Gomobile-还是编译成-Exectuable-Binary"><span class="nav-number">3.</span> <span class="nav-text">选择 Gomobile 还是编译成 Exectuable Binary</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">3.1.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kaisar</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'wzGK4U2ABF7dnC2fpU0rMY4c-9Nh9j0Va',
+        appKey: 'xwX7ayGotkpPKwssQO2AeS77',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
