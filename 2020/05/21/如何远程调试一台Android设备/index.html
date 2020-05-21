@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="要想跨越公网调试Android设备首先需要解决两个问题:  如何让adb走tcp通信而不是走usb数据线 如何从公网连接这台设备  解决第一个问题:通过tcp调试Android手机其实adb本身是支持通过tcp协议传输数据的只是可能大部分人从来没用过这个功能,大家可以在终端里面输入adb –help查看,里面有这么几个参数: 1234567...networking: connect HOST[:">
+<meta name="description" content="要想跨越公网调试Android设备首先需要解决两个问题:  如何让adb走tcp通信而不是走usb数据线 如何从公网连接这台设备  第一个问题:通过tcp调试Android手机其实adb本身是支持通过tcp协议传输数据的只是可能大部分人从来没用过这个功能,大家可以在终端里面输入adb –help查看,里面有这么几个参数: 1234567...networking: connect HOST[:PO">
 <meta property="og:type" content="article">
-<meta property="og:title" content="如何跨越公网调试一台Android设备">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;26&#x2F;%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E4%B8%80%E5%8F%B0Android%E8%AE%BE%E5%A4%87&#x2F;index.html">
+<meta property="og:title" content="如何远程调试一台Android设备">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;21&#x2F;%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E4%B8%80%E5%8F%B0Android%E8%AE%BE%E5%A4%87&#x2F;index.html">
 <meta property="og:site_name" content="狂人日记">
-<meta property="og:description" content="要想跨越公网调试Android设备首先需要解决两个问题:  如何让adb走tcp通信而不是走usb数据线 如何从公网连接这台设备  解决第一个问题:通过tcp调试Android手机其实adb本身是支持通过tcp协议传输数据的只是可能大部分人从来没用过这个功能,大家可以在终端里面输入adb –help查看,里面有这么几个参数: 1234567...networking: connect HOST[:">
+<meta property="og:description" content="要想跨越公网调试Android设备首先需要解决两个问题:  如何让adb走tcp通信而不是走usb数据线 如何从公网连接这台设备  第一个问题:通过tcp调试Android手机其实adb本身是支持通过tcp协议传输数据的只是可能大部分人从来没用过这个功能,大家可以在终端里面输入adb –help查看,里面有这么几个参数: 1234567...networking: connect HOST[:PO">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;.com&#x2F;&#x2F;step_1.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;.com&#x2F;&#x2F;step_2.png">
-<meta property="og:updated_time" content="2020-05-21T11:17:04.574Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;21&#x2F;%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E4%B8%80%E5%8F%B0Android%E8%AE%BE%E5%A4%87&#x2F;step_1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;21&#x2F;%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E4%B8%80%E5%8F%B0Android%E8%AE%BE%E5%A4%87&#x2F;step_2.png">
+<meta property="og:updated_time" content="2020-05-21T12:38:09.990Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;.com&#x2F;&#x2F;step_1.png">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;21&#x2F;%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E4%B8%80%E5%8F%B0Android%E8%AE%BE%E5%A4%87&#x2F;step_1.png">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/11/26/如何远程调试一台Android设备/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/05/21/如何远程调试一台Android设备/"/>
 
 
 
 
 
-  <title>如何跨越公网调试一台Android设备 | 狂人日记</title>
+  <title>如何远程调试一台Android设备 | 狂人日记</title>
   
 
 
@@ -263,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/26/%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E4%B8%80%E5%8F%B0Android%E8%AE%BE%E5%A4%87/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/21/%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E4%B8%80%E5%8F%B0Android%E8%AE%BE%E5%A4%87/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Kaisar">
@@ -280,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">如何跨越公网调试一台Android设备</h1>
+          <h1 class="post-title" itemprop="name headline">如何远程调试一台Android设备</h1>
         
 
         <div class="post-meta">
@@ -292,8 +292,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-26T14:16:17+08:00">
-                2019-11-26
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-21T20:18:10+08:00">
+                2020-05-21
               </time>
             
 
@@ -333,8 +333,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/11/26/%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E4%B8%80%E5%8F%B0Android%E8%AE%BE%E5%A4%87/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/11/26/%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E4%B8%80%E5%8F%B0Android%E8%AE%BE%E5%A4%87/" itemprop="commentCount"></span>
+                <a href="/2020/05/21/%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E4%B8%80%E5%8F%B0Android%E8%AE%BE%E5%A4%87/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/21/%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E4%B8%80%E5%8F%B0Android%E8%AE%BE%E5%A4%87/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -367,21 +367,25 @@
 <li>如何让adb走tcp通信而不是走usb数据线</li>
 <li>如何从公网连接这台设备</li>
 </ol>
-<h2 id="解决第一个问题-通过tcp调试Android手机"><a href="#解决第一个问题-通过tcp调试Android手机" class="headerlink" title="解决第一个问题:通过tcp调试Android手机"></a>解决第一个问题:通过tcp调试Android手机</h2><p>其实<code>adb</code>本身是支持通过tcp协议传输数据的只是可能大部分人从来没用过这个功能,大家可以在终端里面输入adb –help查看,里面有这么几个参数:</p>
+<h2 id="第一个问题-通过tcp调试Android手机"><a href="#第一个问题-通过tcp调试Android手机" class="headerlink" title="第一个问题:通过tcp调试Android手机"></a>第一个问题:通过tcp调试Android手机</h2><p>其实<code>adb</code>本身是支持通过tcp协议传输数据的只是可能大部分人从来没用过这个功能,大家可以在终端里面输入adb –help查看,里面有这么几个参数:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">networking:</span><br><span class="line"> connect HOST[:PORT]      connect to a device via TCP/IP</span><br><span class="line"> disconnect [[HOST]:PORT] disconnect from given TCP/IP device, or all</span><br><span class="line">...</span><br><span class="line"> usb                      restart adbd listening on USB</span><br><span class="line"> tcpip PORT               restart adbd listening on TCP on PORT</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">举个例子:</span><br><span class="line"></span><br><span class="line">```shell</span><br><span class="line">adb shell ifconfig wlan0 #先查看一下手机wifi的ip地址后续连接的时候会用到</span><br><span class="line">adb tcpip 5555 #将手机切换到tcp模式并在5555端口上监听</span><br><span class="line">adb connect 192.168.1.8:5555 #连接手机对应的ip地址和端口</span><br></pre></td></tr></table></figure>
+<p>connect和disconnect是用来连接一台远程设备或者断开远程设备的,usb和tcpip选项是用来切换手机端adbd守护进程工作模式的我们要用到的就是tcpip这个参数使adbd服务监听在一个特定的网络端口上</p>
+<p>举个例子:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">adb shell ifconfig wlan0 #先查看一下手机wifi的ip地址后续连接的时候会用到</span><br><span class="line">adb tcpip 5555 #将手机切换到tcp模式并在5555端口上监听</span><br><span class="line">adb connect 192.168.1.8:5555 #连接手机对应的ip地址和端口</span><br></pre></td></tr></table></figure>
 
 <p>至此第一个问题已解决</p>
-<h2 id="解决第二个问题-跨越公网连接设备"><a href="#解决第二个问题-跨越公网连接设备" class="headerlink" title="解决第二个问题:跨越公网连接设备"></a>解决第二个问题:跨越公网连接设备</h2><p>在大多数的环境中我们手机都是通过连接一台无线路由器NAT上网的,但是熟悉网络的小伙伴一定知道路由器并不会给手机分配一个公网IP而是一个内网的,因此我们理论上从公网上是不能直接访问到这台手机的.这里我们需要做一个内网穿透把这台手机给暴露在公网上这样我们才能直接访问,而目前内网穿透的方案有很多像商业的<code>花生壳</code>以及开源的<code>nginx</code>或<code>frp</code>这些,商业的限制太多切收费而<code>nginx</code>又太复杂那剩下的只有<code>frp</code>了不了解<code>frp</code>的同学可以自行搜索一下使用起来也比较简单,不过这里又有一个问题了我们需要一台具有公网IP服务器来运行<code>frp</code>的server端!这…貌似又陷入了死循环… 不过幸好找到一个免费的<a href="https://www.natfrp.com/" target="_blank" rel="noopener">frp服务器</a>用<a href="https://github.com/FrpcCluster/frpc-Android" target="_blank" rel="noopener">Android版本的frp的客户端</a>可以直接连接并且速度还不错具体怎么配置查看frp文档很简单,感谢站长用爱发电! 至此需要的东西都准备齐了大致的网络拓扑如下</p>
+<a id="more"></a>
+
+<h2 id="第二个问题-跨越公网连接设备"><a href="#第二个问题-跨越公网连接设备" class="headerlink" title="第二个问题:跨越公网连接设备"></a>第二个问题:跨越公网连接设备</h2><p>在大多数的环境中我们手机都是通过连接一台无线路由器NAT上网的,但是熟悉网络的小伙伴一定知道路由器并不会给手机分配一个公网IP而是一个内网的,因此我们理论上从公网上是不能直接访问到这台手机的.这里我们需要做一个内网穿透把这台手机给暴露在公网上这样我们才能直接访问,而目前内网穿透的方案有很多像商业的<code>花生壳</code>以及开源的<code>nginx</code>或<code>frp</code>这些,商业的限制太多切收费而<code>nginx</code>又太复杂那剩下的只有<code>frp</code>了不了解<code>frp</code>的同学可以自行搜索一下使用起来也比较简单,不过这里又有一个问题了我们需要一台具有公网IP服务器来运行<code>frp</code>的server端!这…貌似又陷入了死循环… 不过幸好找到一个免费的<a href="https://www.natfrp.com/" target="_blank" rel="noopener">frp服务器</a>用<a href="https://github.com/FrpcCluster/frpc-Android" target="_blank" rel="noopener">Android版本的frp的客户端</a>可以直接连接并且速度还不错具体怎么配置查看frp文档很简单,感谢站长用爱发电! 至此需要的东西都准备齐了大致的网络拓扑如下</p>
 <div id="sequence-0"></div>
 
 <ol>
 <li><p>先把Android设备切换到tcp模式下</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb tcpip 5555 #将手机切换到tcp模式并在5555端口上监听</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>去natfrp网站注册账号申请一个隧道<br><img src="/.com//step_1.png" alt>创建好了之后点击配置文件这个选择之前申请的服务器节点下面就会限制对应的配置文件</p>
-<p><img src="/.com//step_2.png" alt="alt"></p>
+<li><p>去natfrp网站注册账号申请一个隧道<br><img src="/2020/05/21/%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E4%B8%80%E5%8F%B0Android%E8%AE%BE%E5%A4%87/step_1.png" alt>创建好了之后点击配置文件这个选择之前申请的服务器节点下面就会限制对应的配置文件</p>
+<p><img src="/2020/05/21/%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E4%B8%80%E5%8F%B0Android%E8%AE%BE%E5%A4%87/step_2.png" alt></p>
 </li>
 <li><p>安装Android frpc客户端</p>
 <ul>
@@ -405,12 +409,12 @@
 <p>找到客户端配置文件中的<code>server_addr</code>和<code>remote_port</code>字段这两个就是我们的连接设备的地址和端口</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb connect 27.155.87.89:58998</span><br></pre></td></tr></table></figure>
 
-<p>如果不出意外的话应该就会连上的之后就可以像在本地一样调试设备了<script src="https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js"></script><script src="https://cdn.bootcss.com/raphael/2.2.8/raphael.min.js"></script><script src="https://cdn.bootcss.com/snap.svg/0.5.1/snap.svg-min.js"></script><script src="https://cdn.bootcss.com/underscore.js/1.9.1/underscore-min.js"></script><script src="https://cdn.bootcss.com/js-sequence-diagrams/1.0.6/sequence-diagram-min.js"></script><textarea id="sequence-0-code" style="display: none">note over Android设备:adbd监听5555端口
-Android设备 --> natfrp服务器:通过frpc映射5555端口
-note over natfrp服务器:监听8.8.8.8:5555
-note over PC开发调试主机:adb connect 8.8.8.8:5555
-PC开发调试主机 -> natfrp服务器:
-natfrp服务器 -> Android设备:</textarea><textarea id="sequence-0-options" style="display: none">{"theme":"simple"}</textarea><script>  var code = document.getElementById("sequence-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("sequence-0-options").value));  var diagram = Diagram.parse(code);  diagram.drawSVG("sequence-0", options);</script></p>
+<p>如果不出意外的话应该就会连上的之后就可以像在本地一样调试设备了<script src="https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js"></script><script src="https://cdn.bootcss.com/raphael/2.2.8/raphael.min.js"></script><script src="https://cdn.bootcss.com/snap.svg/0.5.1/snap.svg-min.js"></script><script src="https://cdn.bootcss.com/underscore.js/1.9.1/underscore-min.js"></script><script src="https://cdn.bootcss.com/js-sequence-diagrams/1.0.6/sequence-diagram-min.js"></script><textarea id="sequence-0-code" style="display: none">Android设备-->natfrp服务器:通过frpc映射5555端口
+note over Android设备:adbd监听5555端口
+note over natfrp服务器:监听x.x.x.x:5555
+PC开发调试主机->natfrp服务器:
+note over PC开发调试主机:adb connect x.x.x.x:5555
+natfrp服务器-->Android设备:</textarea><textarea id="sequence-0-options" style="display: none">{"theme":"simple"}</textarea><script>  var code = document.getElementById("sequence-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("sequence-0-options").value));  var diagram = Diagram.parse(code);  diagram.drawSVG("sequence-0", options);</script></p>
 </li>
 </ol>
 
@@ -466,8 +470,8 @@ natfrp服务器 -> Android设备:</textarea><textarea id="sequence-0-options" st
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/11/17/Android%E4%BD%8E%E7%89%88%E6%9C%AC-4-x-%E6%97%A0%E6%B3%95%E9%80%9A%E8%BF%87app-process%E5%90%AF%E5%8A%A8java%E8%BF%9B%E7%A8%8B%E8%AF%A6%E8%A7%A3/" rel="next" title="Android低版本(4.x)无法通过app_process启动java进程问题详解">
-                <i class="fa fa-chevron-left"></i> Android低版本(4.x)无法通过app_process启动java进程问题详解
+              <a href="/2020/04/30/%E9%9B%B6%E6%88%90%E6%9C%AC%E8%AE%A9%E4%BD%A0%E6%8B%A5%E6%9C%89Mac%E8%A7%A6%E6%91%B8%E6%9D%BF%E9%BC%A0%E6%A0%87/" rel="next" title="零成本让你拥有Mac触摸板鼠标">
+                <i class="fa fa-chevron-left"></i> 零成本让你拥有Mac触摸板鼠标
               </a>
             
           </div>
@@ -475,10 +479,6 @@ natfrp服务器 -> Android设备:</textarea><textarea id="sequence-0-options" st
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/11/26/%E5%A6%82%E4%BD%95%E5%9C%A8Android%E4%B8%8A%E9%80%9A%E8%BF%87pm%E5%91%BD%E4%BB%A4%E5%AE%89%E8%A3%85%E6%8B%86%E5%88%86%E5%8C%85/" rel="prev" title="如何在Android上通过pm命令安装拆分包">
-                如何在Android上通过pm命令安装拆分包 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -624,7 +624,7 @@ natfrp服务器 -> Android设备:</textarea><textarea id="sequence-0-options" st
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#解决第一个问题-通过tcp调试Android手机"><span class="nav-number">1.</span> <span class="nav-text">解决第一个问题:通过tcp调试Android手机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决第二个问题-跨越公网连接设备"><span class="nav-number">2.</span> <span class="nav-text">解决第二个问题:跨越公网连接设备</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一个问题-通过tcp调试Android手机"><span class="nav-number">1.</span> <span class="nav-text">第一个问题:通过tcp调试Android手机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二个问题-跨越公网连接设备"><span class="nav-number">2.</span> <span class="nav-text">第二个问题:跨越公网连接设备</span></a></li></ol></div>
             
 
           </div>
