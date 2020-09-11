@@ -86,11 +86,8 @@
 <meta property="og:site_name" content="狂人日记">
 <meta property="og:description" content="要想跨越公网调试Android设备首先需要解决两个问题:  如何让adb走tcp通信而不是走usb数据线 如何从公网连接这台设备  第一个问题:通过tcp调试Android手机其实adb本身是支持通过tcp协议传输数据的只是可能大部分人从来没用过这个功能,大家可以在终端里面输入adb –help查看,里面有这么几个参数: 1234567...networking: connect HOST[:PO">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;21&#x2F;%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E4%B8%80%E5%8F%B0Android%E8%AE%BE%E5%A4%87&#x2F;step_1.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;21&#x2F;%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E4%B8%80%E5%8F%B0Android%E8%AE%BE%E5%A4%87&#x2F;step_2.png">
-<meta property="og:updated_time" content="2020-05-21T12:38:09.990Z">
+<meta property="og:updated_time" content="2020-09-11T02:37:35.885Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;21&#x2F;%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E4%B8%80%E5%8F%B0Android%E8%AE%BE%E5%A4%87&#x2F;step_1.png">
 
 
 
@@ -315,8 +312,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android%E9%BB%91%E7%A7%91%E6%8A%80/" itemprop="url" rel="index">
-                    <span itemprop="name">Android黑科技</span>
+                  <a href="/categories/Android%E5%A5%87%E5%B7%A7%E6%B7%AB%E6%8A%80/" itemprop="url" rel="index">
+                    <span itemprop="name">Android奇巧淫技</span>
                   </a>
                 </span>
 
@@ -383,20 +380,11 @@
 <ol>
 <li><p>先把Android设备切换到tcp模式下</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb tcpip 5555 #将手机切换到tcp模式并在5555端口上监听</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>去natfrp网站注册账号申请一个隧道<br><img src="/2020/05/21/%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E4%B8%80%E5%8F%B0Android%E8%AE%BE%E5%A4%87/step_1.png" alt>创建好了之后点击配置文件这个选择之前申请的服务器节点下面就会限制对应的配置文件</p>
-<p><img src="/2020/05/21/%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E4%B8%80%E5%8F%B0Android%E8%AE%BE%E5%A4%87/step_2.png" alt></p>
-</li>
-<li><p>安装Android frpc客户端</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">2. 去natfrp网站注册账号申请一个隧道</span><br><span class="line">   ![](step_1.png)创建好了之后点击配置文件这个选择之前申请的服务器节点下面就会限制对应的配置文件</span><br><span class="line">   </span><br><span class="line">   ![](step_2.png)</span><br><span class="line"></span><br><span class="line">3. 安装Android frpc客户端</span><br><span class="line"></span><br><span class="line">   * 下载对应手机架构的[frpc客户端](https://github.com/fatedier/frp/releases)</span><br><span class="line">     arm架构下载[frp_0.33.0_linux_arm.tar.gz](https://github.com/fatedier/frp/releases/download/v0.33.0/frp_0.33.0_linux_arm.tar.gz)</span><br><span class="line">     arm64架构下载[frp_0.33.0_linux_arm64.tar.gz](https://github.com/fatedier/frp/releases/download/v0.33.0/frp_0.33.0_linux_arm64.tar.gz)</span><br><span class="line">   </span><br><span class="line">   * 下载完成后从压缩文件中把```frpc```解压出来传到设备上的临时目录并追加执行权限</span><br></pre></td></tr></table></figure>
+<p>  adb push frpc /data/local/tmp<br>  adb shell chmod +x /data/local/tmp/frpc</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">* 导入在网站上生成的客户端配置文件</span><br><span class="line">  ```shell</span><br><span class="line">  adb shell</span><br><span class="line">  </span><br><span class="line">  cat &gt; /sdcard/frpc.ini &lt;&lt; EOL</span><br><span class="line">  [common]</span><br><span class="line">  server_addr = 27.155.87.89</span><br><span class="line">  server_port = 7000</span><br><span class="line">  tcp_mux = true</span><br><span class="line">  pool_count = 1</span><br><span class="line">  protocol = tcp</span><br><span class="line">  user = xxxxxxxxxxxxxx</span><br><span class="line">  token = xxxxxxxxxxxxxxxx</span><br><span class="line">  dns_server = 114.114.114.114</span><br><span class="line">   </span><br><span class="line">  [AndroidTunnel]</span><br><span class="line">  privilege_mode = true</span><br><span class="line">  type = tcp</span><br><span class="line">  local_ip = 127.0.0.1</span><br><span class="line">  local_port = 5555</span><br><span class="line">  remote_port = 58998</span><br><span class="line">  use_encryption = false</span><br><span class="line">  use_compression = true</span><br><span class="line">  EOL</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li><p>下载对应手机架构的<a href="https://github.com/fatedier/frp/releases" target="_blank" rel="noopener">frpc客户端</a><br>arm架构下载<a href="https://github.com/fatedier/frp/releases/download/v0.33.0/frp_0.33.0_linux_arm.tar.gz" target="_blank" rel="noopener">frp_0.33.0_linux_arm.tar.gz</a><br>arm64架构下载<a href="https://github.com/fatedier/frp/releases/download/v0.33.0/frp_0.33.0_linux_arm64.tar.gz" target="_blank" rel="noopener">frp_0.33.0_linux_arm64.tar.gz</a></p>
-</li>
-<li><p>下载完成后从压缩文件中把<code>frpc</code>解压出来传到设备上的临时目录并追加执行权限</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">adb push frpc /data/local/tmp</span><br><span class="line">adb shell chmod +x /data/local/tmp/frpc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>导入在网站上生成的客户端配置文件</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">adb shell</span><br><span class="line"></span><br><span class="line">cat &gt; /sdcard/frpc.ini &lt;&lt; EOL</span><br><span class="line">[common]</span><br><span class="line">server_addr = 27.155.87.89</span><br><span class="line">server_port = 7000</span><br><span class="line">tcp_mux = true</span><br><span class="line">pool_count = 1</span><br><span class="line">protocol = tcp</span><br><span class="line">user = xxxxxxxxxxxxxx</span><br><span class="line">token = xxxxxxxxxxxxxxxx</span><br><span class="line">dns_server = 114.114.114.114</span><br><span class="line"> </span><br><span class="line">[AndroidTunnel]</span><br><span class="line">privilege_mode = true</span><br><span class="line">type = tcp</span><br><span class="line">local_ip = 127.0.0.1</span><br><span class="line">local_port = 5555</span><br><span class="line">remote_port = 58998</span><br><span class="line">use_encryption = false</span><br><span class="line">use_compression = true</span><br><span class="line">EOL</span><br></pre></td></tr></table></figure>
-</li>
 <li><p>运行<code>frpc</code>客户端映射端口</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup /data/local/tmp/frpc -c /sdcard/frpc.ini &gt; /sdcard/frpc.log &amp;</span><br></pre></td></tr></table></figure>
 <blockquote>
@@ -576,7 +564,7 @@ natfrp服务器-->Android设备:</textarea><textarea id="sequence-0-options" sty
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/categories/Android%E5%B0%8F%E6%8A%80%E5%B7%A7.html">
+                <a href="/categories/Android%E5%A5%87%E5%B7%A7%E6%B7%AB%E6%8A%80.html">
                   <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
