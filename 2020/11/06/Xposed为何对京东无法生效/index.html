@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前一阵子对京东的一个功能比较好奇于是就有了逆向京东的想法,我熟练的拿起了jadx对京东进行反编译居然没有混淆心中狂喜很快就找到入口点,于是又祭出了Xposed大法飞快的写了个插件Hook了Activity的onCreate方法,我迫不及待的跑了起来结果hook貌似没有生效任何Log都没有输出,反复检查后仍不得其解不过此时的我已心中暗暗猜测京东应该有一些反Xposed的机制,因为之前曾见过”酷安">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Xposed为何对京东无法生效">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;11&#x2F;06&#x2F;Xposed%E4%B8%BA%E4%BD%95%E5%AF%B9%E4%BA%AC%E4%B8%9C%E6%97%A0%E6%B3%95%E7%94%9F%E6%95%88&#x2F;index.html">
+<meta property="og:site_name" content="狂人日记">
+<meta property="og:description" content="前一阵子对京东的一个功能比较好奇于是就有了逆向京东的想法,我熟练的拿起了jadx对京东进行反编译居然没有混淆心中狂喜很快就找到入口点,于是又祭出了Xposed大法飞快的写了个插件Hook了Activity的onCreate方法,我迫不及待的跑了起来结果hook貌似没有生效任何Log都没有输出,反复检查后仍不得其解不过此时的我已心中暗暗猜测京东应该有一些反Xposed的机制,因为之前曾见过”酷安">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-11-06T12:28:07.041Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/11/06/Xposed为何对京东无法生效/"/>
+
+
+
+
+
+  <title>Xposed为何对京东无法生效 | 狂人日记</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e1652ff183810cf4d455e5b84bbb89f2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">狂人日记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Kaisar's Notes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/06/Xposed%E4%B8%BA%E4%BD%95%E5%AF%B9%E4%BA%AC%E4%B8%9C%E6%97%A0%E6%B3%95%E7%94%9F%E6%95%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Kaisar">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="狂人日记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Xposed为何对京东无法生效</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-11-06T18:20:36+08:00">
+                2020-11-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Xposed%E6%A8%A1%E5%9D%97%E5%BC%80%E5%8F%91/" itemprop="url" rel="index">
+                    <span itemprop="name">Xposed模块开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/11/06/Xposed%E4%B8%BA%E4%BD%95%E5%AF%B9%E4%BA%AC%E4%B8%9C%E6%97%A0%E6%B3%95%E7%94%9F%E6%95%88/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/11/06/Xposed%E4%B8%BA%E4%BD%95%E5%AF%B9%E4%BA%AC%E4%B8%9C%E6%97%A0%E6%B3%95%E7%94%9F%E6%95%88/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>  前一阵子对京东的一个功能比较好奇于是就有了逆向京东的想法,我熟练的拿起了<code>jadx</code>对京东进行反编译居然没有混淆心中狂喜很快就找到入口点,于是又祭出了<code>Xposed</code>大法飞快的写了个插件Hook了<code>Activity</code>的<code>onCreate</code>方法,我迫不及待的跑了起来结果hook貌似没有生效任何Log都没有输出,反复检查后仍不得其解不过此时的我已心中暗暗猜测京东应该有一些反<code>Xposed</code>的机制,因为之前曾见过”酷安”和”知乎”也有这样的功能,于是又Hook了像<code>Class.forName</code>和<code>ClassLoader.loadClass</code>这样的函数来验证一下我的想法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">XposedHelpers.findAndHookMethod(ClassLoader.class, "loadClass", String.class, new XC_MethodHook()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">beforeHookedMethod</span><span class="params">(MethodHookParam param)</span> <span class="keyword">throws</span> Throwable</span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(((String)param.args[<span class="number">0</span>]).startsWith(<span class="string">"de.robv.android.xposed"</span>))</span><br><span class="line">		&#123;</span><br><span class="line">		Log.d(<span class="string">"Kaisar"</span>, <span class="string">"loadclass:"</span> + Arrays.toString(param.args), <span class="keyword">new</span> Throwable());</span><br><span class="line">		param.setThrowable(<span class="keyword">new</span> ClassNotFoundException());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;);</span><br><span class="line">XposedHelpers.findAndHookMethod(Class.class, "forName", String.class, new XC_MethodHook()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">beforeHookedMethod</span><span class="params">(MethodHookParam param)</span> <span class="keyword">throws</span> Throwable</span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(((String)param.args[<span class="number">0</span>]).startsWith(<span class="string">"de.robv.android.xposed"</span>))</span><br><span class="line">		&#123;</span><br><span class="line">		Log.d(<span class="string">"Kaisar"</span>, <span class="string">"forName:"</span> + Arrays.toString(param.args), <span class="keyword">new</span> Throwable());</span><br><span class="line">		param.setThrowable(<span class="keyword">new</span> ClassNotFoundException());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+
+<p>这是抓到的log:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">2020-11-06 19:54:14.503 30297-30297/? D/Kaisar: loadclass:[de.robv.android.xposed.XposedBridge]</span><br><span class="line">    java.lang.Throwable</span><br><span class="line">        at com.kaisar.jdplugin.MainPlugin$1.beforeHookedMethod(MainPlugin.java:38)</span><br><span class="line">        at de.robv.android.xposed.XC_MethodHook.callBeforeHookedMethod(XC_MethodHook.java:51)</span><br><span class="line">        at com.swift.sandhook.xposedcompat.hookstub.HookStubManager.hookBridge(HookStubManager.java:281)</span><br><span class="line">        at com.swift.sandhook.xposedcompat.hookstub.MethodHookerStubs32.stub_hook_5(MethodHookerStubs32.java:228)</span><br><span class="line">        at java.lang.Runtime.nativeLoad(Native Method)</span><br><span class="line">        at java.lang.Runtime.loadLibrary0(Runtime.java:1014)</span><br><span class="line">        at java.lang.System.loadLibrary(System.java:1669)</span><br><span class="line">        at com.jingdong.app.mall.JDApp.loadLib(JDApp.java:134)</span><br><span class="line">        at com.jingdong.app.mall.JDApp.&lt;clinit&gt;(Unknown Source:0)</span><br><span class="line">        at java.lang.reflect.Constructor.newInstance0(Native Method)</span><br><span class="line">        at java.lang.reflect.Constructor.newInstance(Constructor.java:343)</span><br><span class="line">        at com.jd.chappie.loader.ChappieApplication.reflectClientApplication(Unknown Source:23)</span><br><span class="line">        at com.jd.chappie.loader.ChappieApplication.attachBaseContext(Unknown Source:3)</span><br><span class="line">        at java.lang.reflect.Method.invoke(Native Method)</span><br><span class="line">        at com.swift.sandhook.SandHook.callOriginMethod(SandHook.java:185)</span><br><span class="line">        at com.swift.sandhook.SandHook.callOriginMethod(SandHook.java:163)</span><br><span class="line">        at com.swift.sandhook.xposedcompat.hookstub.HookStubManager.hookBridge(HookStubManager.java:304)</span><br><span class="line">        at com.swift.sandhook.xposedcompat.hookstub.MethodHookerStubs32.stub_hook_6(MethodHookerStubs32.java:234)</span><br><span class="line">        at android.app.Application.attach(Application.java:212)</span><br><span class="line">        at android.app.Instrumentation.newApplication(Instrumentation.java:1122)</span><br><span class="line">        at android.app.LoadedApk.makeApplication(LoadedApk.java:1052)</span><br><span class="line">        at android.app.ActivityThread.handleBindApplication(ActivityThread.java:5877)</span><br><span class="line">        at java.lang.reflect.Method.invoke(Native Method)</span><br><span class="line">        at com.swift.sandhook.SandHook.callOriginMethod(SandHook.java:185)</span><br><span class="line">        at com.swift.sandhook.SandHook.callOriginMethod(SandHook.java:163)</span><br><span class="line">        at com.swift.sandhook.xposedcompat.hookstub.HookStubManager.hookBridge(HookStubManager.java:304)</span><br><span class="line">        at com.swift.sandhook.xposedcompat.hookstub.MethodHookerStubs32.stub_hook_0(MethodHookerStubs32.java:198)</span><br><span class="line">        at android.app.ActivityThread.access$1100(ActivityThread.java:200)</span><br><span class="line">        at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1660)</span><br><span class="line">        at android.os.Handler.dispatchMessage(Handler.java:106)</span><br><span class="line">        at android.os.Looper.loop(Looper.java:193)</span><br><span class="line">        at android.app.ActivityThread.main(ActivityThread.java:6762)</span><br><span class="line">        at java.lang.reflect.Method.invoke(Native Method)</span><br><span class="line">        at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:493)</span><br><span class="line">        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:858)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>天网恢恢疏而不漏,结果还真的发现在京东一个<code>so</code>中加载了<code>XposedBridge</code>这个类,京东再怎么说也是购物支付软件反<code>Xposed</code>这点技术肯定还是要做的,没关系既然<code>Xposed</code> hook不了的东西那就自己动手hook一下吧,于是在<code>Application</code>的<code>attachBaseContext</code>方法之前手动Hook了<code>ActivityThread</code>的<code>mH</code>变量中的一些关键函数并且输出一些log</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">XposedHelpers.findAndHookMethod(<span class="string">"com.jd.chappie.loader.ChappieApplication"</span>, lpparam.classLoader, <span class="string">"attachBaseContext"</span>, Context<span class="class">.<span class="keyword">class</span>, <span class="title">new</span> <span class="title">XC_MethodHook</span>()</span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">beforeHookedMethod</span><span class="params">(MethodHookParam param)</span> <span class="keyword">throws</span> Throwable</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        Log.d(<span class="string">"Kaisar"</span>, <span class="string">"attachBaseContext before:"</span> + getClass().getName());</span><br><span class="line">        <span class="keyword">try</span></span><br><span class="line">        &#123;</span><br><span class="line">            Class&lt;?&gt; ActivityThread = Class.forName(<span class="string">"android.app.ActivityThread"</span>);</span><br><span class="line">            Object currentActivityThread = ActivityThread.getMethod(<span class="string">"currentActivityThread"</span>).invoke(<span class="keyword">null</span>);</span><br><span class="line">            Field mH = ActivityThread.getDeclaredField(<span class="string">"mH"</span>);</span><br><span class="line">            mH.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">            Handler handler = (Handler)mH.get(currentActivityThread);</span><br><span class="line">            Field mCallback = Handler.class.getDeclaredField("mCallback");</span><br><span class="line">            mCallback.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">            mCallback.set(handler, <span class="keyword">new</span> Handler.Callback()</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">handleMessage</span><span class="params">(@NonNull Message msg)</span></span></span><br><span class="line"><span class="function">                </span>&#123;</span><br><span class="line">                    Log.d(<span class="string">"Kaisar"</span>, <span class="string">"handler:"</span> + msg);</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span>(Exception e)</span><br><span class="line">        &#123;</span><br><span class="line">            Log.e(<span class="string">"Kaisar"</span>, <span class="string">"hook handler failed"</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">afterHookedMethod</span><span class="params">(MethodHookParam param)</span> <span class="keyword">throws</span> Throwable</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        Log.d(<span class="string">"Kaisar"</span>, <span class="string">"attachBaseContext after:"</span> + getClass().getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+
+
+<p>不过奇怪的事情发生了hook还是没有发生任何作用,按道理来说不通过<code>Xposed</code> hook, 京东是不太容易知道hook了哪些函数,但是竟然没有任何log输出很奇怪,于是我又在<code>attachBaseContext</code>之前启动了一个线程延迟十秒以确保<code>attchBaseContext</code>流程走完检查hook点并输出日志但是更奇怪的是线程延迟了10秒竟还是没有任何输出</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">beforeHookedMethod</span><span class="params">(MethodHookParam param)</span> <span class="keyword">throws</span> Throwable</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Log.d(<span class="string">"Kaisar"</span>, <span class="string">"attachBaseContext before:"</span> + getClass().getName());</span><br><span class="line">    <span class="keyword">try</span></span><br><span class="line">    &#123;</span><br><span class="line">        Class&lt;?&gt; ActivityThread = Class.forName(<span class="string">"android.app.ActivityThread"</span>);</span><br><span class="line">        Object currentActivityThread = ActivityThread.getMethod(<span class="string">"currentActivityThread"</span>).invoke(<span class="keyword">null</span>);</span><br><span class="line">        Field mH = ActivityThread.getDeclaredField(<span class="string">"mH"</span>);</span><br><span class="line">        mH.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        Handler handler = (Handler)mH.get(currentActivityThread);</span><br><span class="line">        Field mCallback = Handler.class.getDeclaredField("mCallback");</span><br><span class="line">        mCallback.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        mCallback.set(handler, <span class="keyword">new</span> Handler.Callback()</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">handleMessage</span><span class="params">(@NonNull Message msg)</span></span></span><br><span class="line"><span class="function">            </span>&#123;</span><br><span class="line">                Log.d(<span class="string">"Kaisar"</span>, <span class="string">"handler:"</span> + msg);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        Log.d(<span class="string">"Kaisar"</span>, <span class="string">"hook handler ok"</span>);</span><br><span class="line">        Object o = mCallback.get(handler);</span><br><span class="line">        Log.d(<span class="string">"Kaisar"</span>, <span class="string">"check handler:"</span> + mCallback.get(handler));</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span></span><br><span class="line"><span class="function">            </span>&#123;</span><br><span class="line">                <span class="keyword">try</span></span><br><span class="line">                &#123;</span><br><span class="line">                    Log.d(<span class="string">"Kaisar"</span>, <span class="string">"wait delay check handle"</span>);</span><br><span class="line">                    SystemClock.sleep(<span class="number">5000</span>);</span><br><span class="line">                    Log.d(<span class="string">"Kaisar"</span>, <span class="string">"delay check handler:"</span> + mCallback.get(handler));</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">catch</span>(Throwable e)</span><br><span class="line">                &#123;</span><br><span class="line">                    Log.e(<span class="string">"Kaisar"</span>, <span class="string">"delay check failed"</span>, e);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span>(Exception e)</span><br><span class="line">    &#123;</span><br><span class="line">        Log.e(<span class="string">"Kaisar"</span>, <span class="string">"hook handler failed"</span>, e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>难道说京东竟然可以检测到我开了线程并把我的线程给停掉了? 事情好像没有那么简单了 于是上<code>Xposed</code>开发群里问问大佬看看有没有遇到过结果还真有!</p>
+<p>大佬说:<strong>狗东把log给吃了…</strong>  (划重点此题必考) 于是我把打log的地方换成了写文件 果然log有了 WTF 就这么简单? 这你敢信? 我以为用了什么宇宙无敌黑科技 结果就这搞了我几个小时?   卒…</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>赠人玫瑰手有余香</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Kaisar 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Kaisar 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/11/05/InputStream%E6%97%A0%E6%B3%95%E4%B8%8EBufferReader%E5%90%8C%E6%97%B6%E7%94%A8/" rel="next" title="InputStream无法与BufferReader同时用">
+                <i class="fa fa-chevron-left"></i> InputStream无法与BufferReader同时用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Kaisar" />
+            
+              <p class="site-author-name" itemprop="name">Kaisar</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/Android%E5%A5%87%E5%B7%A7%E6%B7%AB%E6%8A%80.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/jrsen" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:anjonadmin@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kaisar</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'wzGK4U2ABF7dnC2fpU0rMY4c-9Nh9j0Va',
+        appKey: 'xwX7ayGotkpPKwssQO2AeS77',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
