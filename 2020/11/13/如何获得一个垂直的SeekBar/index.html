@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="小记在开发”上帝模式”的一个新功能中偶然需要用到一个垂直的SeekBar,一开始想得比较简单系统应该有提供这样垂直的SeekBar但是翻了一下SDK并没有于是上网搜索,查找下来无非这两种:  使用原生的SeekBar旋转90度 自定义SeekBar在onDraw方法和onMeasure方法中旋转画布并重新计算控件大小  那为什么有两种呢让我们来分别分析一下这两个方案的优缺点:  第一种使用原生的S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何获得一个垂直的SeekBar">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;11&#x2F;13&#x2F;%E5%A6%82%E4%BD%95%E8%8E%B7%E5%BE%97%E4%B8%80%E4%B8%AA%E5%9E%82%E7%9B%B4%E7%9A%84SeekBar&#x2F;index.html">
+<meta property="og:site_name" content="狂人日记">
+<meta property="og:description" content="小记在开发”上帝模式”的一个新功能中偶然需要用到一个垂直的SeekBar,一开始想得比较简单系统应该有提供这样垂直的SeekBar但是翻了一下SDK并没有于是上网搜索,查找下来无非这两种:  使用原生的SeekBar旋转90度 自定义SeekBar在onDraw方法和onMeasure方法中旋转画布并重新计算控件大小  那为什么有两种呢让我们来分别分析一下这两个方案的优缺点:  第一种使用原生的S">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;11&#x2F;13&#x2F;%E5%A6%82%E4%BD%95%E8%8E%B7%E5%BE%97%E4%B8%80%E4%B8%AA%E5%9E%82%E7%9B%B4%E7%9A%84SeekBar&#x2F;rotate_compare.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;11&#x2F;13&#x2F;%E5%A6%82%E4%BD%95%E8%8E%B7%E5%BE%97%E4%B8%80%E4%B8%AA%E5%9E%82%E7%9B%B4%E7%9A%84SeekBar&#x2F;custom_seekbar.png">
+<meta property="og:updated_time" content="2020-11-13T10:00:59.929Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;11&#x2F;13&#x2F;%E5%A6%82%E4%BD%95%E8%8E%B7%E5%BE%97%E4%B8%80%E4%B8%AA%E5%9E%82%E7%9B%B4%E7%9A%84SeekBar&#x2F;rotate_compare.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/11/13/如何获得一个垂直的SeekBar/"/>
+
+
+
+
+
+  <title>如何获得一个垂直的SeekBar | 狂人日记</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e1652ff183810cf4d455e5b84bbb89f2";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">狂人日记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Kaisar's Notes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/13/%E5%A6%82%E4%BD%95%E8%8E%B7%E5%BE%97%E4%B8%80%E4%B8%AA%E5%9E%82%E7%9B%B4%E7%9A%84SeekBar/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Kaisar">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="狂人日记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">如何获得一个垂直的SeekBar</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-11-13T13:43:40+08:00">
+                2020-11-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
+                    <span itemprop="name">Android开发实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/11/13/%E5%A6%82%E4%BD%95%E8%8E%B7%E5%BE%97%E4%B8%80%E4%B8%AA%E5%9E%82%E7%9B%B4%E7%9A%84SeekBar/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/11/13/%E5%A6%82%E4%BD%95%E8%8E%B7%E5%BE%97%E4%B8%80%E4%B8%AA%E5%9E%82%E7%9B%B4%E7%9A%84SeekBar/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="小记"><a href="#小记" class="headerlink" title="小记"></a>小记</h2><p>在开发”上帝模式”的一个新功能中偶然需要用到一个垂直的<code>SeekBar</code>,一开始想得比较简单系统应该有提供这样垂直的<code>SeekBar</code>但是翻了一下SDK并没有于是上网搜索,查找下来无非这两种:</p>
+<ol>
+<li>使用原生的<code>SeekBar</code>旋转90度</li>
+<li>自定义<code>SeekBar</code>在<code>onDraw</code>方法和<code>onMeasure</code>方法中旋转画布并重新计算控件大小</li>
+</ol>
+<p>那为什么有两种呢让我们来分别分析一下这两个方案的优缺点:</p>
+<ul>
+<li><p>第一种使用原生的<code>SeekBar</code>最简单但是旋转后的宽高就不对了,实际上的宽是旋转后的高这也导致如果我们要增加<code>SeekBar</code>的高度就需要修改宽度但是会导致布局错乱以下是旋转前后对比:</p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">SeekBar</span></span></span><br><span class="line"><span class="tag">           <span class="attr">android:id</span>=<span class="string">"@+id/seekbar1"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">android:layout_width</span>=<span class="string">"120dp"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">android:layout_gravity</span>=<span class="string">"center"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">android:clickable</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">android:layoutDirection</span>=<span class="string">"rtl"</span>/&gt;</span></span><br><span class="line">   </span><br><span class="line">    <span class="tag">&lt;<span class="name">SeekBar</span></span></span><br><span class="line"><span class="tag">           <span class="attr">android:id</span>=<span class="string">"@+id/seekbar2"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">android:layout_width</span>=<span class="string">"120dp"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">android:layout_gravity</span>=<span class="string">"center"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">android:clickable</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">android:layoutDirection</span>=<span class="string">"rtl"</span></span></span><br><span class="line"><span class="tag">           <span class="attr">android:rotation</span>=<span class="string">"90"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+<a id="more"></a>
+
+<p><img src="/2020/11/13/%E5%A6%82%E4%BD%95%E8%8E%B7%E5%BE%97%E4%B8%80%E4%B8%AA%E5%9E%82%E7%9B%B4%E7%9A%84SeekBar/rotate_compare.png" alt></p>
+<p> 可以看到旋转后的<code>SeekBar</code>实际上控件位置并未改变,这会导致布局有问题, 因此有了第二种方案</p>
+<ul>
+<li><p>第二种自定义<code>SeekBar</code>这种方式就是为了解决第一种方式会导致控件实际布局大小不一致的情况,核心的逻辑也是旋转画布并且重新计算控件大小</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">VerticalSeekBar</span> <span class="keyword">extends</span> <span class="title">SeekBar</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">VerticalSeekBar</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">VerticalSeekBar</span><span class="params">(Context context, AttributeSet attrs, <span class="keyword">int</span> defStyle)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs, defStyle);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">VerticalSeekBar</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onSizeChanged</span><span class="params">(<span class="keyword">int</span> w, <span class="keyword">int</span> h, <span class="keyword">int</span> oldw, <span class="keyword">int</span> oldh)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onSizeChanged(h, w, oldh, oldw);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">setProgress</span><span class="params">(<span class="keyword">int</span> progress)</span>  <span class="comment">// it is necessary for calling setProgress on click of a button</span></span></span><br><span class="line"><span class="function">   </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.setProgress(progress);</span><br><span class="line">    onSizeChanged(getWidth(), getHeight(), <span class="number">0</span>, <span class="number">0</span>); </span><br><span class="line">   &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">onMeasure</span><span class="params">(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onMeasure(heightMeasureSpec, widthMeasureSpec);</span><br><span class="line">        setMeasuredDimension(getMeasuredHeight(), getMeasuredWidth());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas c)</span> </span>&#123;</span><br><span class="line">        c.rotate(-<span class="number">90</span>);</span><br><span class="line">        c.translate(-getHeight(), <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">super</span>.onDraw(c);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent event)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!isEnabled()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">switch</span> (event.getAction()) &#123;</span><br><span class="line">            <span class="keyword">case</span> MotionEvent.ACTION_DOWN:</span><br><span class="line">            <span class="keyword">case</span> MotionEvent.ACTION_MOVE:</span><br><span class="line">            <span class="keyword">case</span> MotionEvent.ACTION_UP:</span><br><span class="line">                setProgress(getMax() - (<span class="keyword">int</span>) (getMax() * event.getY() / getHeight()));</span><br><span class="line">                onSizeChanged(getWidth(), getHeight(), <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">case</span> MotionEvent.ACTION_CANCEL:</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> <img src="/2020/11/13/%E5%A6%82%E4%BD%95%E8%8E%B7%E5%BE%97%E4%B8%80%E4%B8%AA%E5%9E%82%E7%9B%B4%E7%9A%84SeekBar/custom_seekbar.png" alt></p>
+<p>  问题至此看起来已解决,不过我还是不想自定义<code>SeekBar</code>因为看起来比较麻烦但是有什么办法可以解决原生<code>SeekBar</code>大小的问题呢?此时我想起来系统的音量调节面板很好奇它是怎么实现的于是开始源码的探索之路</p>
+<p> 我们要找到音量面板得先找到它的的代码因为平时调节音量这个窗口都是浮动在其他窗口上的因此可以断定是个悬浮窗,那我们先用<code>dumpsys</code>把<code>window</code>信息拿出来看一下</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> adb shell dumpsys window</span></span><br><span class="line">...</span><br><span class="line">WINDOW MANAGER ANIMATOR STATE (dumpsys window animator)</span><br><span class="line">    DisplayContentsAnimator #0:</span><br><span class="line">      Window #0: WindowStateAnimator&#123;6d30f com.android.systemui.ImageWallpaper&#125;</span><br><span class="line">      Window #1: WindowStateAnimator&#123;400acfc com.android.settings/com.android.settings.applications.InstalledAppDetails&#125;</span><br><span class="line">      Window #2: WindowStateAnimator&#123;fe69f85 com.android.chrome/com.google.android.apps.chrome.Main&#125;</span><br><span class="line">      Window #3: WindowStateAnimator&#123;8607f21 com.android.launcher3/com.android.a1launcher.AndroidOneLauncher&#125;</span><br><span class="line">      Window #4: WindowStateAnimator&#123;faaa1da com.android.launcher3/com.android.a1launcher.AndroidOneLauncher&#125;</span><br><span class="line">      Window #5: WindowStateAnimator&#123;193860b com.mjar.test/com.mjar.test.MainActivity&#125;</span><br><span class="line">      Window #6: WindowStateAnimator&#123;6299ce8 com.iapgame.ia2048/com.example.jrsen.testapp.MainActivity&#125;</span><br><span class="line">      Window #7: WindowStateAnimator&#123;f6af01 DockedStackDivider&#125;</span><br><span class="line">      Window #8: WindowStateAnimator&#123;e2101a6 AssistPreviewPanel&#125;</span><br><span class="line">      Window #9: WindowStateAnimator&#123;f2b29d2 StatusBar&#125;</span><br><span class="line">      Window #10: WindowStateAnimator&#123;ef277e7 VolumeDialogImpl&#125;</span><br><span class="line">      Window #11: WindowStateAnimator&#123;68afaa3 PointerLocation&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p> 可以看到有一个很可疑的窗口 <code>Window #10: WindowStateAnimator{ef277e7 VolumeDialogImpl}</code>名字看上去跟音量相关应该就是它没跑了,拿着这个名字到Android源码中搜索在<code>frameworks/base/packages/SystemUI/src/com/android/systemui/volume/VolumeDialogImpl.java</code> 中找到了它,跟了一下代码找到了加载布局的相关代码片段</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initRow</span><span class="params">(<span class="keyword">final</span> VolumeRow row, <span class="keyword">final</span> <span class="keyword">int</span> stream, <span class="keyword">int</span> iconRes, <span class="keyword">int</span> iconMuteRes,</span></span></span><br><span class="line"><span class="function"><span class="params">                     <span class="keyword">boolean</span> important, <span class="keyword">boolean</span> defaultStream)</span> </span>&#123;</span><br><span class="line">    row.stream = stream;</span><br><span class="line">    row.iconRes = iconRes;</span><br><span class="line">    row.iconMuteRes = iconMuteRes;</span><br><span class="line">    row.important = important;</span><br><span class="line">    row.defaultStream = defaultStream;</span><br><span class="line">    row.view = mDialog.getLayoutInflater().inflate(R.layout.volume_dialog_row, <span class="keyword">null</span>);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> 找到<code>frameworks/base/packages/SystemUI/res/layout/volume_dialog_row.xml</code>对应的布局文件</p>
+ <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="tag">&lt;<span class="name">FrameLayout</span></span></span><br><span class="line"><span class="tag">             <span class="attr">android:id</span>=<span class="string">"@+id/volume_row_slider_frame"</span></span></span><br><span class="line"><span class="tag">             <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">             <span class="attr">android:layout_marginTop</span>=<span class="string">"@dimen/volume_dialog_slider_margin_top"</span></span></span><br><span class="line"><span class="tag">             <span class="attr">android:layout_marginBottom</span>=<span class="string">"@dimen/volume_dialog_slider_margin_bottom"</span></span></span><br><span class="line"><span class="tag">             <span class="attr">android:layoutDirection</span>=<span class="string">"rtl"</span></span></span><br><span class="line"><span class="tag">             <span class="attr">android:layout_height</span>=<span class="string">"@dimen/volume_dialog_slider_height"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">SeekBar</span></span></span><br><span class="line"><span class="tag">             <span class="attr">android:id</span>=<span class="string">"@+id/volume_row_slider"</span></span></span><br><span class="line"><span class="tag">             <span class="attr">android:clickable</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">             <span class="attr">android:layout_width</span>=<span class="string">"@dimen/volume_dialog_slider_height"</span></span></span><br><span class="line"><span class="tag">             <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">             <span class="attr">android:layoutDirection</span>=<span class="string">"rtl"</span></span></span><br><span class="line"><span class="tag">             <span class="attr">android:layout_gravity</span>=<span class="string">"center"</span></span></span><br><span class="line"><span class="tag">             <span class="attr">android:rotation</span>=<span class="string">"90"</span> /&gt;</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p> 到这里问题就找到答案了系统也是用的原生的<code>SeekBar</code>只不过在外层包裹了一个<code>FrameLayout</code>用于裁切<code>SeekBar</code>的实际大小,实在是秒啊!</p>
+</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>求知若渴遇到不懂的多研究研究源码总能在里面找到惊喜</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>我就是我是颜色不一样的烟火!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Kaisar 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Kaisar 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/11/11/ByteBuffer%E8%AF%A6%E8%A7%A3/" rel="next" title="ByteBuffer详解">
+                <i class="fa fa-chevron-left"></i> ByteBuffer详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Kaisar" />
+            
+              <p class="site-author-name" itemprop="name">Kaisar</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/Android%E5%A5%87%E5%B7%A7%E6%B7%AB%E6%8A%80.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/jrsen" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:anjonadmin@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://weishu.me/" title="Weishu" target="_blank">Weishu</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#小记"><span class="nav-number">1.</span> <span class="nav-text">小记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">2.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kaisar</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'wzGK4U2ABF7dnC2fpU0rMY4c-9Nh9j0Va',
+        appKey: 'xwX7ayGotkpPKwssQO2AeS77',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
