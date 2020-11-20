@@ -258,6 +258,170 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/23/%E7%94%A8-Golang-%E5%9C%A8-Android-%E4%B8%8A%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%90%86%E7%9A%84%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Kaisar">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="狂人日记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/23/%E7%94%A8-Golang-%E5%9C%A8-Android-%E4%B8%8A%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%90%86%E7%9A%84%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98/" itemprop="url">用 Golang 在 Android 上实现代理的几个问题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-23T17:42:30+08:00">
+                2020-04-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android%E5%BC%80%E5%8F%91%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
+                    <span itemprop="name">Android开发实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/23/%E7%94%A8-Golang-%E5%9C%A8-Android-%E4%B8%8A%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%90%86%E7%9A%84%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/04/23/%E7%94%A8-Golang-%E5%9C%A8-Android-%E4%B8%8A%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%90%86%E7%9A%84%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <blockquote>
+<p>转自:<a href="https://blog.dio.wtf/post/tips-for-golang-proxy-for-android/" target="_blank" rel="noopener">https://blog.dio.wtf/post/tips-for-golang-proxy-for-android/</a> 仅供备份</p>
+</blockquote>
+<p>用 Golang 来实现的代理不要太多，像 <a href="https://github.com/v2ray/v2ray-core" target="_blank" rel="noopener">V2Ray</a>，<a href="https://github.com/txthinking/brook" target="_blank" rel="noopener">Brook</a>，<a href="https://github.com/Dreamacro/clash" target="_blank" rel="noopener">Clash</a>。一方面得益于 Golang 标准库对于网络编程的支持，另一方面也是由于其便利的交叉编译。如果要在 Android 上用 Golang 实现一套代理方案，还是必须要处理一些问题，或者说是所有的代理方案都要解决的平台特性。</p>
+<h2 id="IPC-传递文件描述符"><a href="#IPC-传递文件描述符" class="headerlink" title="IPC 传递文件描述符"></a>IPC 传递文件描述符</h2><p>Android 上使用 <a href="https://developer.android.com/reference/android/net/VpnService" target="_blank" rel="noopener">VpnService</a> 由系统创建一个 TUN 虚拟网卡并接收所有的流量，API 会返回一个 file descriptor，通过这个 FD 可以读取/写入 IP packet。</p>
+<p>为了稳定性和性能考虑，我们通常会将代理程序放到一个单独的进程里。但是在 Android 的阉割版 Linux 环境下，子进程是无法访问父进程的 FD。这里就需要用到 Linux 通用的进程间共享 FD 的方案，也就是给 Unix Socket 设置 <code>SCM_RIGHTS</code> 标识，然后用 <code>recvmsg</code> 和 <code>sendmsg</code> 来收发。在 Android 和 Golang 中都有对应的 API。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> LocalSocket.setFileDescriptorsForSend (FileDescriptor[] fds)</span><br><span class="line"><span class="keyword">public</span> FileDescriptor[] LocalSocket.getAncillaryFileDescriptors ()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// UnixRights encodes file descriptors into a socket control message</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">syscall</span>.<span class="title">UnixRights</span><span class="params">(fds ...<span class="keyword">int</span>)</span> []<span class="title">byte</span></span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">syscall</span>.<span class="title">Sendmsg</span><span class="params">(fd <span class="keyword">int</span>, p, oob []<span class="keyword">byte</span>, to Sockaddr, flags <span class="keyword">int</span>)</span> <span class="params">(err error)</span></span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">syscall</span>.<span class="title">Recvmsg</span><span class="params">(fd <span class="keyword">int</span>, p, oob []<span class="keyword">byte</span>, flags <span class="keyword">int</span>)</span> <span class="params">(n, oobn <span class="keyword">int</span>, recvflags <span class="keyword">int</span>, from Sockaddr, err error)</span></span></span><br><span class="line"><span class="comment">// ParseSocketControlMessage parses b as an array of socket control</span></span><br><span class="line"><span class="comment">// messages.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">syscall</span>.<span class="title">ParseSocketControlMessage</span><span class="params">(b []<span class="keyword">byte</span>)</span> <span class="params">([]SocketControlMessage, error)</span></span></span><br><span class="line"><span class="comment">// ParseUnixRights decodes a socket control message that contains an</span></span><br><span class="line"><span class="comment">// integer array of open file descriptors from another process.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">syscall</span>.<span class="title">ParseUnixRights</span><span class="params">(m *SocketControlMessage)</span> <span class="params">([]<span class="keyword">int</span>, error)</span></span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/04/23/%E7%94%A8-Golang-%E5%9C%A8-Android-%E4%B8%8A%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%90%86%E7%9A%84%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/29/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95Xposed%E6%A8%A1%E5%9D%97%E4%B8%8D%E7%94%A8%E9%87%8D%E5%90%AF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -770,7 +934,7 @@
               
                 <a href="/archives%7C%7C%20archive">
               
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
